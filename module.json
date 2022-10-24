@@ -1,0 +1,13 @@
+{
+    "name": "AdBoxes",
+    "alias": "adboxes",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\AdBoxes\\Providers\\AdBoxesServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}
