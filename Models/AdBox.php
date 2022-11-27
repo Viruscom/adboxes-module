@@ -28,10 +28,10 @@ class AdBox extends Model implements TranslatableContract
     public static $SECOND_TYPE            = 2;
     public static $THIRD_TYPE             = 3;
     public static $FOURTH_TYPE            = 4;
-    public static $AD_BOX_1_SYSTEM_IMAGE  = 'adbox_img.png';
-    public static $AD_BOX_2_SYSTEM_IMAGE  = 'adbox2_img.png';
-    public static $AD_BOX_3_SYSTEM_IMAGE  = 'adbox3_img.png';
-    public static $AD_BOX_4_SYSTEM_IMAGE  = 'adbox4_img.png';
+    public static $AD_BOX_1_SYSTEM_IMAGE  = 'adboxes_1_image.png';
+    public static $AD_BOX_2_SYSTEM_IMAGE  = 'adboxes_2_image.png';
+    public static $AD_BOX_3_SYSTEM_IMAGE  = 'adboxes_3_image.png';
+    public static $AD_BOX_4_SYSTEM_IMAGE  = 'adboxes_4_image.png';
     public static $AD_BOX_1_MIMES         = "jpg,jpeg,png,gif";
     public static $AD_BOX_2_MIMES         = "jpg,jpeg,png,gif";
     public static $AD_BOX_3_MIMES         = "jpg,jpeg,png,gif";
@@ -125,10 +125,10 @@ class AdBox extends Model implements TranslatableContract
     }
     private static function setAdBoxesTypes($array)
     {
-        $array[self::$FIRST_TYPE]  = self::firstType()->orderByPosition('asc')->withTranslation()->get();
-        $array[self::$SECOND_TYPE] = self::secondType()->orderByPosition('asc')->withTranslation()->get();
-        $array[self::$THIRD_TYPE]  = self::thirdType()->orderByPosition('asc')->withTranslation()->get();
-        $array[self::$FOURTH_TYPE] = self::fourthType()->orderByPosition('asc')->withTranslation()->get();
+        $array[self::$FIRST_TYPE]  = self::firstType()->orderByPosition('asc')->withTranslation()->with('translations')->get();
+        $array[self::$SECOND_TYPE] = self::secondType()->orderByPosition('asc')->withTranslation()->with('translations')->get();
+        $array[self::$THIRD_TYPE]  = self::thirdType()->orderByPosition('asc')->withTranslation()->with('translations')->get();
+        $array[self::$FOURTH_TYPE] = self::fourthType()->orderByPosition('asc')->withTranslation()->with('translations')->get();
 
         return $array;
     }
@@ -375,7 +375,7 @@ class AdBox extends Model implements TranslatableContract
         return $this->getFilesPath() . $filename;
     }
 
-    public function getAnnonce(): string
+    public function getAnnounce(): string
     {
         return Str::limit($this->short_description, 255, ' ...');
     }

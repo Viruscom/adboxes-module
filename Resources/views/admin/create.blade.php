@@ -65,6 +65,7 @@
 @endsection
 @section('content')
     @include('adboxes::admin.breadcrumbs')
+    @include('admin.notify')
     <form class="my-form" action="{{ route('ad-boxes.store') }}" method="POST" data-form-type="store" enctype="multipart/form-data">
         @include('admin.notify')
         <div class="col-xs-12 p-0">
@@ -166,91 +167,91 @@
 
                                         @if(array_key_exists('LawPage', $activeModules))
                                             <optgroup label="@lang('page::admin.pages.index')"></optgroup>
-                                    @endif
+                                        @endif
 
-                                            @if(array_key_exists('Brand', $activeModules))
-                                                <optgroup label="@lang('page::admin.pages.index')"></optgroup>
-                                    @endif
+                                        @if(array_key_exists('Brand', $activeModules))
+                                            <optgroup label="@lang('page::admin.pages.index')"></optgroup>
+                                        @endif
 
-                                            @if(array_key_exists('Hotel', $activeModules))
-                                                <optgroup label="@lang('page::admin.pages.index')"></optgroup>
-                                    @endif
+                                        @if(array_key_exists('Hotel', $activeModules))
+                                            <optgroup label="@lang('page::admin.pages.index')"></optgroup>
+                                        @endif
 
-                                            @if(array_key_exists('Team', $activeModules))
-                                                <optgroup label="@lang('page::admin.pages.index')"></optgroup>
-                                    @endif
-                                    {{--                                        @foreach($navigations as $navigation)--}}
-                                    {{--                                            @php--}}
-                                    {{--                                                $navTranslation = $navigation->getTranslation($language->id)->first();--}}
-                                    {{--                                                if(is_null($navTranslation)){--}}
-                                    {{--                                                    continue;--}}
-                                    {{--                                                }--}}
-                                    {{--                                                $pages = $navigation->content_pages()->orderBy('position')->get();--}}
-                                    {{--                                                $url = ($navigation->isHomeModule()) ? $language->code.'/': $language->code.'/page/'.$navTranslation->slug;--}}
-                                    {{--                                            @endphp--}}
-                                    {{--                                            <option value="{{$url}}">{{$navTranslation->title}}</option>--}}
-                                    {{--                                            @if($navigation->isBrandModule() && !$brands->isEmpty())--}}
-                                    {{--                                                @foreach($brands as $brand)--}}
-                                    {{--                                                    @php--}}
-                                    {{--                                                        $brandTranslation = $brand->translations()->where('language_id', $language->id)->first();--}}
-                                    {{--                                                        if(is_null($brandTranslation)){--}}
-                                    {{--                                                            continue;--}}
-                                    {{--                                                        }--}}
-                                    {{--                                                    @endphp--}}
-                                    {{--                                                    <option value="{{$url.'/'.$brandTranslation->slug}}"><span>&#8226;</span> {{$brandTranslation->title}}</option>--}}
-                                    {{--                                                @endforeach--}}
-                                    {{--                                            @else--}}
-                                    {{--                                                @foreach($pages as $page)--}}
-                                    {{--                                                    @php--}}
-                                    {{--                                                        $pageTranslation = $page->translations()->where('language_id', $language->id)->first();--}}
-                                    {{--                                                        if(is_null($pageTranslation)){--}}
-                                    {{--                                                            continue;--}}
-                                    {{--                                                        }--}}
-                                    {{--                                                    @endphp--}}
-                                    {{--                                                    <option value="{{$url.'/'.$pageTranslation->slug}}"><span>&#8226;</span> {{$pageTranslation->title}}</option>--}}
-                                    {{--                                                @endforeach--}}
-                                    {{--                                            @endif--}}
+                                        @if(array_key_exists('Team', $activeModules))
+                                            <optgroup label="@lang('page::admin.pages.index')"></optgroup>
+                                        @endif
+                                        {{--                                        @foreach($navigations as $navigation)--}}
+                                        {{--                                            @php--}}
+                                        {{--                                                $navTranslation = $navigation->getTranslation($language->id)->first();--}}
+                                        {{--                                                if(is_null($navTranslation)){--}}
+                                        {{--                                                    continue;--}}
+                                        {{--                                                }--}}
+                                        {{--                                                $pages = $navigation->content_pages()->orderBy('position')->get();--}}
+                                        {{--                                                $url = ($navigation->isHomeModule()) ? $language->code.'/': $language->code.'/page/'.$navTranslation->slug;--}}
+                                        {{--                                            @endphp--}}
+                                        {{--                                            <option value="{{$url}}">{{$navTranslation->title}}</option>--}}
+                                        {{--                                            @if($navigation->isBrandModule() && !$brands->isEmpty())--}}
+                                        {{--                                                @foreach($brands as $brand)--}}
+                                        {{--                                                    @php--}}
+                                        {{--                                                        $brandTranslation = $brand->translations()->where('language_id', $language->id)->first();--}}
+                                        {{--                                                        if(is_null($brandTranslation)){--}}
+                                        {{--                                                            continue;--}}
+                                        {{--                                                        }--}}
+                                        {{--                                                    @endphp--}}
+                                        {{--                                                    <option value="{{$url.'/'.$brandTranslation->slug}}"><span>&#8226;</span> {{$brandTranslation->title}}</option>--}}
+                                        {{--                                                @endforeach--}}
+                                        {{--                                            @else--}}
+                                        {{--                                                @foreach($pages as $page)--}}
+                                        {{--                                                    @php--}}
+                                        {{--                                                        $pageTranslation = $page->translations()->where('language_id', $language->id)->first();--}}
+                                        {{--                                                        if(is_null($pageTranslation)){--}}
+                                        {{--                                                            continue;--}}
+                                        {{--                                                        }--}}
+                                        {{--                                                    @endphp--}}
+                                        {{--                                                    <option value="{{$url.'/'.$pageTranslation->slug}}"><span>&#8226;</span> {{$pageTranslation->title}}</option>--}}
+                                        {{--                                                @endforeach--}}
+                                        {{--                                            @endif--}}
 
-                                    {{--                                            @if($navigation->isHotelModule())--}}
-                                    {{--                                                <optgroup label="@lang('administration_messages.module_11')">--}}
-                                    {{--                                                    @php--}}
-                                    {{--                                                        $hotels = $navigation->hotels()->orderBy('position', 'asc')->get();--}}
-                                    {{--                                                    @endphp--}}
-                                    {{--                                                    @if(!$hotels->isEmpty())--}}
-                                    {{--                                                        @foreach($hotels as $hotel)--}}
-                                    {{--                                                            @php--}}
-                                    {{--                                                                $hotelTranslation = $hotel->translations->where('language_id', $language->id)->first();--}}
-                                    {{--                                                            @endphp--}}
-                                    {{--                                                            <option value="{{$language->code.'/page/'.$navTranslation->slug.'/'.$hotelTranslation->slug}}"> - - {{--}}
-                                    {{--                                                        $hotelTranslation->title}}</option>--}}
-                                    {{--                                                        @endforeach--}}
-                                    {{--                                                    @endif--}}
-                                    {{--                                                </optgroup>--}}
-                                    {{--                                            @endif--}}
-                                    {{--                                        @endforeach--}}
-                                    {{--                                        <optgroup label="Продуктови категории и продукти">--}}
-                                    {{--                                            @foreach($productCategories as $productCategory)--}}
-                                    {{--                                                @php--}}
-                                    {{--                                                    $productCategoryTranslation = $productCategory->translations()->where('language_id', $language->id)->first();--}}
-                                    {{--                                                    $navTranslation = $productCategory->navigation->translations()->where('language_id', $language->id)->first();--}}
-                                    {{--                                                    if(is_null($navTranslation)){--}}
-                                    {{--                                                        continue;--}}
-                                    {{--                                                    }--}}
-                                    {{--                                                    $products = $productCategory->products()->orderBy('position')->get();--}}
-                                    {{--                                                @endphp--}}
-                                    {{--                                                <option value="{{$language->code.'/product_category/'.$navTranslation->slug.'/'.$productCategoryTranslation->slug}}">{{$productCategoryTranslation->title}}</option>--}}
-                                    {{--                                                @foreach($products as $product)--}}
-                                    {{--                                                    @php--}}
-                                    {{--                                                        $productTranslation = $product->translations()->where('language_id', $language->id)->first();--}}
-                                    {{--                                                        if(is_null($pageTranslation)){--}}
-                                    {{--                                                            continue;--}}
-                                    {{--                                                        }--}}
-                                    {{--                                                    @endphp--}}
-                                    {{--                                                    <option value="{{$language->code.'/product_category/'.$navTranslation->slug.'/'.$productCategoryTranslation->slug.'/'.$productTranslation->slug}}"><span>&#8226;</span> {{$productTranslation->title}}</option>--}}
-                                    {{--                                                @endforeach--}}
-                                    {{--                                            @endforeach--}}
-                                    {{--                                        </optgroup>--}}
-                                                                        </select>
+                                        {{--                                            @if($navigation->isHotelModule())--}}
+                                        {{--                                                <optgroup label="@lang('administration_messages.module_11')">--}}
+                                        {{--                                                    @php--}}
+                                        {{--                                                        $hotels = $navigation->hotels()->orderBy('position', 'asc')->get();--}}
+                                        {{--                                                    @endphp--}}
+                                        {{--                                                    @if(!$hotels->isEmpty())--}}
+                                        {{--                                                        @foreach($hotels as $hotel)--}}
+                                        {{--                                                            @php--}}
+                                        {{--                                                                $hotelTranslation = $hotel->translations->where('language_id', $language->id)->first();--}}
+                                        {{--                                                            @endphp--}}
+                                        {{--                                                            <option value="{{$language->code.'/page/'.$navTranslation->slug.'/'.$hotelTranslation->slug}}"> - - {{--}}
+                                        {{--                                                        $hotelTranslation->title}}</option>--}}
+                                        {{--                                                        @endforeach--}}
+                                        {{--                                                    @endif--}}
+                                        {{--                                                </optgroup>--}}
+                                        {{--                                            @endif--}}
+                                        {{--                                        @endforeach--}}
+                                        {{--                                        <optgroup label="Продуктови категории и продукти">--}}
+                                        {{--                                            @foreach($productCategories as $productCategory)--}}
+                                        {{--                                                @php--}}
+                                        {{--                                                    $productCategoryTranslation = $productCategory->translations()->where('language_id', $language->id)->first();--}}
+                                        {{--                                                    $navTranslation = $productCategory->navigation->translations()->where('language_id', $language->id)->first();--}}
+                                        {{--                                                    if(is_null($navTranslation)){--}}
+                                        {{--                                                        continue;--}}
+                                        {{--                                                    }--}}
+                                        {{--                                                    $products = $productCategory->products()->orderBy('position')->get();--}}
+                                        {{--                                                @endphp--}}
+                                        {{--                                                <option value="{{$language->code.'/product_category/'.$navTranslation->slug.'/'.$productCategoryTranslation->slug}}">{{$productCategoryTranslation->title}}</option>--}}
+                                        {{--                                                @foreach($products as $product)--}}
+                                        {{--                                                    @php--}}
+                                        {{--                                                        $productTranslation = $product->translations()->where('language_id', $language->id)->first();--}}
+                                        {{--                                                        if(is_null($pageTranslation)){--}}
+                                        {{--                                                            continue;--}}
+                                        {{--                                                        }--}}
+                                        {{--                                                    @endphp--}}
+                                        {{--                                                    <option value="{{$language->code.'/product_category/'.$navTranslation->slug.'/'.$productCategoryTranslation->slug.'/'.$productTranslation->slug}}"><span>&#8226;</span> {{$productTranslation->title}}</option>--}}
+                                        {{--                                                @endforeach--}}
+                                        {{--                                            @endforeach--}}
+                                        {{--                                        </optgroup>--}}
+                                    </select>
                                 </div>
                             </div>
 
