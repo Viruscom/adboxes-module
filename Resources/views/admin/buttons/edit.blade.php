@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('styles')
-    <link href="{{ asset('admin/css/select2.min.css') }}" rel="stylesheet"/>
+    <link href="{{ asset('admin/assets/css/select2.min.css') }}" rel="stylesheet"/>
     <link href="{{ asset('admin/plugins/foundation-datepicker/datepicker.css') }}" rel="stylesheet"/>
 @endsection
 
