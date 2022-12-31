@@ -5,7 +5,7 @@
 @endsection
 
 @section('scripts')
-    <script src="{{ asset('admin/js/select2.min.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/select2.min.js') }}"></script>
     <script src="{{ asset('admin/plugins/foundation-datepicker/datepicker.js') }}"></script>
     <script>
         $(".select2").select2({language: "bg"});
@@ -84,13 +84,13 @@
                 </ul>
                 <div class="tab-content">
                     @foreach($languages as $language)
-                        <?php
-                        $langTitle = 'title_' . $language->code;
-                        $langVisible = 'visible_' . $language->code;
-                        $langLink = 'url_' . $language->code;
-                        $langExternalUrl = 'external_url_' . $language->code;
-                        $adboxTranslation = $adBoxButton->where('adbox_type', $adBoxButton->adbox_type)->where('language_id', $language->id)->first();
-                        ?>
+                            <?php
+                            $langTitle        = 'title_' . $language->code;
+                            $langVisible      = 'visible_' . $language->code;
+                            $langLink         = 'url_' . $language->code;
+                            $langExternalUrl  = 'external_url_' . $language->code;
+                            $adboxTranslation = $adBoxButton->where('adbox_type', $adBoxButton->adbox_type)->where('language_id', $language->id)->first();
+                            ?>
                         <div id="{{$language->code}}" class="tab-pane fade in @if($language->code == env('DEF_LANG_CODE')) active @endif">
                             <div class="row">
                                 <div class="col-md-12">

@@ -67,7 +67,6 @@
     @include('adboxes::admin.breadcrumbs')
     @include('admin.notify')
     <form class="my-form" action="{{ route('ad-boxes.store') }}" method="POST" data-form-type="store" enctype="multipart/form-data">
-        @include('admin.notify')
         <div class="col-xs-12 p-0">
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <input type="hidden" name="position" value="{{old('position')}}">
