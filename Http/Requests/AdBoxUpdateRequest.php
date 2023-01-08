@@ -2,7 +2,6 @@
 
 namespace Modules\AdBoxes\Http\Requests;
 
-
 use App\Helpers\LanguageHelper;
 use Illuminate\Foundation\Http\FormRequest;
 use Modules\AdBoxes\Models\AdBox;

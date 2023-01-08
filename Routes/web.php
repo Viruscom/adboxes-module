@@ -25,7 +25,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], static function () {
         Route::get('/{id}/edit', [AdBoxesController::class, 'edit'])->name('ad-boxes.edit');
         Route::post('/{id}/update', [AdBoxesController::class, 'update'])->name('ad-boxes.update');
         Route::delete('/{id}/delete', [AdBoxesController::class, 'delete'])->name('ad-boxes.delete');
-        Route::delete('/{id}/image/delete', [AdBoxesController::class, 'imgDelete'])->name('ad-boxes.delete-img');
+        Route::get('/{id}/image/delete', [AdBoxesController::class, 'imgDelete'])->name('ad-boxes.delete-img');
         Route::delete('/delete/multiple/', [AdBoxesController::class, 'deleteMultiple'])->name('ad-boxes.delete-multiple');
         Route::get('/{id}/show', [AdBoxesController::class, 'show'])->name('ad-boxes.show');
         Route::post('/active/{id}/{active}', [AdBoxesController::class, 'active'])->name('ad-boxes.active');

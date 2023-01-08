@@ -179,7 +179,7 @@ class AdBox extends Model implements TranslatableContract
     }
     public function getSystemImage(): string
     {
-        return AdminHelper::$SYSTEM_IMAGES_PATH . self::${'AD_BOX_' . $this->type . '_SYSTEM_IMAGE'};
+        return AdminHelper::getSystemImage(self::${'AD_BOX_' . $this->type . '_SYSTEM_IMAGE'});
     }
     public function getUrl()
     {

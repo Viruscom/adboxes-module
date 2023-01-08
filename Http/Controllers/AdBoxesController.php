@@ -2,11 +2,12 @@
 
 namespace Modules\AdBoxes\Http\Controllers;
 
+use App\Helpers\AdminHelper;
 use App\Helpers\LanguageHelper;
 use App\Helpers\MainHelper;
-use App\Models\FileDimension;
 use App\Models\Language;
 use Exception;
+use File;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -16,7 +17,6 @@ use Modules\AdBoxes\Http\Requests\AdBoxUpdateRequest;
 use Modules\AdBoxes\Models\AdBox;
 use Modules\AdBoxes\Models\AdBoxButton;
 use Modules\AdBoxes\Models\AdBoxTranslation;
-use Nwidart\Modules\Facades\Module;
 
 class AdBoxesController extends Controller
 {
@@ -37,25 +37,6 @@ class AdBoxesController extends Controller
 
         return view('adboxes::admin.index', compact('adBoxButtons', 'adBoxesAdminAll', 'languages'));
     }
-
-    public function create()
-    {
-        $data                    = [];
-        $data['languages']       = LanguageHelper::getActiveLanguages();
-        $data['adBoxesAdminAll'] = Cache::get('adBoxesAdminAll');
-        $data['fileRules']       = AdBox::getFileRulesForView();
-
-        //        if (Module::has('ShopProductBrand')) {
-        //            $data['brands'] = ShopProductBrand::active(true)->with('translations')->orderBy('position')->get();
-        //        }
-        //
-        //        if (Module::has('ShopProductBrand')) {
-        //            $data['productCategories'] = ShopProductCategory::active(true)->with('translations')->with('products')->orderBy('position')->get();
-        //        }
-
-        return view('adboxes::admin.create', $data);
-    }
-
     public function store(AdBoxStoreRequest $request): RedirectResponse
     {
         $data      = AdBox::getRequestData($request);
@@ -77,7 +58,18 @@ class AdBoxesController extends Controller
 
         return redirect()->route('ad-boxes')->with('success-message', 'adboxes::admin.adboxes_actions.successful_create');
     }
+    public function create()
+    {
+        $data = [
+            'adBoxesAdminAll' => Cache::get('adBoxesAdminAll'),
+            'languages'       => LanguageHelper::getActiveLanguages(),
+            'fileRules'       => AdBox::getFileRulesForView()
+        ];
 
+        $data = AdminHelper::getInternalLinksUrls($data);
+
+        return view('adboxes::admin.create', $data);
+    }
     public function edit($id)
     {
         $data          = [];
@@ -86,8 +78,8 @@ class AdBoxesController extends Controller
             return redirect()->back()->withInput()->withErrors(['adboxes::admin.adboxes_actions.record_not_found']);
         }
 
-        $data['languages'] = LanguageHelper::getActiveLanguages();
-        $data['adBoxesAdminAll']   = Cache::get('adBoxesAdminAll');
+        $data['languages']       = LanguageHelper::getActiveLanguages();
+        $data['adBoxesAdminAll'] = Cache::get('adBoxesAdminAll');
         $data['fileRules']       = AdBox::getFileRulesForView();
 
         //
@@ -96,46 +88,6 @@ class AdBoxesController extends Controller
         //        $productCategories = ProductCategory::active(true)->with('translations')->with('products')->orderBy('position')->get();
 
         return view('adboxes::admin.edit', $data);
-    }
-
-    public function update($id, AdBoxUpdateRequest $request): RedirectResponse
-    {
-        $adBox = AdBox::find($id);
-        MainHelper::goBackIfNull($adBox);
-
-        $data      = AdBox::getRequestData($request);
-        $languages = LanguageHelper::getActiveLanguages();
-
-        foreach ($languages as $language) {
-            $data[$language->code] = AdBoxTranslation::getLanguageArray($language, $request);
-        }
-        $adBox->update($data);
-        if ($request->has('image')) {
-            $request->validate(['image' => AdBox::getFileRule($adBox->type)], AdBox::getFileRuleMessage($adBox->type));
-            $adBox->saveFile($request->image);
-        }
-
-        AdBox::cacheUpdate();
-
-        return redirect()->route('ad-boxes')->with('success-message', 'adboxes::admin.adboxes_actions.successful_edit');
-    }
-
-    public function delete($id): RedirectResponse
-    {
-        $adBox = AdBox::find($id);
-        MainHelper::goBackIfNull($adBox);
-
-        if (file_exists($adBox->imagePath())) {
-            \File::delete($adBox->imagePath());
-        }
-
-        $adBoxesToUpdate = AdBox::where('type', $adBox->type)->where('position', '>', $adBox->position)->get();
-        $adBox->delete();
-        foreach ($adBoxesToUpdate as $adBoxToUpdate) {
-            $adBoxToUpdate->update(['position' => $adBoxToUpdate->position - 1]);
-        }
-
-        return redirect()->back()->with('success-message', 'adboxes::admin.adboxes_actions.successful_delete');
     }
 
     public function imgDeleteOneDimension($id)
@@ -152,7 +104,27 @@ class AdBoxesController extends Controller
 
         return redirect()->back()->withErrors(['administration_messages.image_not_found']);
     }
+    public function update($id, AdBoxUpdateRequest $request): RedirectResponse
+    {
+        $adBox = AdBox::find($id);
+        MainHelper::goBackIfNull($adBox);
 
+        $data      = AdBox::getRequestData($request);
+        $languages = LanguageHelper::getActiveLanguages();
+
+        foreach ($languages as $language) {
+            $data[$language->code] = AdBoxTranslation::getLanguageArray($language, $request);
+        }
+        $adBox->update($data);
+        if ($request->has('image')) {
+            $request->validate(['image' => AdBox::getFileRule($adBox->type)], [AdBox::getFileRuleMessage($adBox->type)]);
+            $adBox->saveFile($request->image);
+        }
+
+        AdBox::cacheUpdate();
+
+        return redirect()->route('ad-boxes')->with('success-message', 'adboxes::admin.adboxes_actions.successful_edit');
+    }
     public function deleteMultiple(Request $request): RedirectResponse
     {
         if (!is_null($request->ids[0])) {
@@ -164,7 +136,7 @@ class AdBoxesController extends Controller
                 }
 
                 if (file_exists($adBox->imagePath())) {
-                    \File::delete($adBox->imagePath());
+                    File::delete($adBox->imagePath());
                 }
 
                 $adBoxesToUpdate = AdBox::where('type', $adBox->type)->where('position', '>', $adBox->position)->get();
@@ -179,17 +151,23 @@ class AdBoxesController extends Controller
 
         return redirect()->back()->withErrors(['administration_messages.no_checked_checkboxes']);
     }
-
-    public function active($id, $active)
+    public function delete($id): RedirectResponse
     {
         $adBox = AdBox::find($id);
         MainHelper::goBackIfNull($adBox);
 
-        $adBox->update(['active' => $active]);
+        if (file_exists($adBox->imagePath())) {
+            File::delete($adBox->imagePath());
+        }
 
-        return redirect()->route('ad-boxes')->with('success-message', 'adboxes::admin.adboxes_actions.successful_edit');
+        $adBoxesToUpdate = AdBox::where('type', $adBox->type)->where('position', '>', $adBox->position)->get();
+        $adBox->delete();
+        foreach ($adBoxesToUpdate as $adBoxToUpdate) {
+            $adBoxToUpdate->update(['position' => $adBoxToUpdate->position - 1]);
+        }
+
+        return redirect()->back()->with('success-message', 'adboxes::admin.adboxes_actions.successful_delete');
     }
-
     public function activeMultiple($active, Request $request)
     {
         if (!is_null($request->ids[0])) {
@@ -199,8 +177,7 @@ class AdBoxesController extends Controller
 
         return redirect()->route('ad-boxes')->with('success-message', 'adboxes::admin.adboxes_actions.successful_edit');
     }
-
-    public function positionDown($id)
+    public function positionDown($id): RedirectResponse
     {
         $adBox = AdBox::find($id);
         MainHelper::goBackIfNull($adBox);
@@ -213,8 +190,7 @@ class AdBoxesController extends Controller
 
         return redirect()->route('ad-boxes')->with('success-message', 'adboxes::admin.adboxes_actions.successful_edit');
     }
-
-    public function positionUp($id)
+    public function positionUp($id): RedirectResponse
     {
         $adBox = AdBox::find($id);
         MainHelper::goBackIfNull($adBox);
@@ -227,7 +203,6 @@ class AdBoxesController extends Controller
 
         return redirect()->route('ad-boxes')->with('success-message', 'adboxes::admin.adboxes_actions.successful_edit');
     }
-
     public function ajaxUpdatePositions($id, $position)
     {
         $adBox = AdBox::find($id);
@@ -240,8 +215,7 @@ class AdBoxesController extends Controller
 
         return 1;
     }
-
-    public function returnToWaiting($id)
+    public function returnToWaiting($id): RedirectResponse
     {
         $adBox = AdBox::find($id);
         MainHelper::goBackIfNull($adBox);
@@ -255,7 +229,6 @@ class AdBoxesController extends Controller
 
         return redirect()->route('ad-boxes')->with('success-message', 'adboxes::admin.adboxes_actions.successful_edit');
     }
-
     public function editButton($adboxType)
     {
         $adBoxButton = AdBoxButton::where('adbox_type', $adboxType)->first();
@@ -273,7 +246,15 @@ class AdBoxesController extends Controller
 
         return view('admin.adboxes.buttons.edit', compact('languages', 'defaultLanguage', 'otherSettings', 'navigations', 'brands', 'productCategories', 'adBoxButton'));
     }
+    public function active($id, $active): RedirectResponse
+    {
+        $adBox = AdBox::find($id);
+        MainHelper::goBackIfNull($adBox);
 
+        $adBox->update(['active' => $active]);
+
+        return redirect()->route('ad-boxes')->with('success-message', 'adboxes::admin.adboxes_actions.successful_edit');
+    }
     public function updateButton($adboxType, Request $request)
     {
         $adBoxButton = AdBoxButton::where('adbox_type', $adboxType)->first();
@@ -293,5 +274,24 @@ class AdBoxesController extends Controller
         }
 
         return redirect()->route('ad-boxes')->with('success-message', 'adboxes::admin.adboxes_actions.successful_edit');
+    }
+
+    public function imgDelete($id): RedirectResponse
+    {
+        $adBox = AdBox::find($id);
+        if (is_null($adBox)) {
+            return redirect()->back()->withInput()->withErrors(['adboxes::admin.adboxes_actions.record_not_found']);
+        }
+
+        if ($adBox->existsFile($adBox->filename)) {
+            $adBox->deleteFile($adBox->filename);
+            $adBox->update(['filename' => '']);
+
+            AdBox::cacheUpdate();
+
+            return redirect()->back()->with('success-message', 'admin.common.successful_delete');
+        }
+
+        return redirect()->back()->withErrors(['admin.image_not_found']);
     }
 }

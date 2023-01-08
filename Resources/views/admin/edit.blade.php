@@ -69,6 +69,7 @@
         <div class="col-xs-12 p-0">
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <input type="hidden" name="position" value="{{(old('position')) ?: $adBox->position}}">
+            <input type="hidden" name="type" value="{{(old('type')) ?: $adBox->type}}">
 
             <div class="bg-grey top-search-bar">
                 <div class="action-mass-buttons pull-right">
@@ -432,7 +433,7 @@
                             <div class="modal-body">
                                 <table class="table table-striped table-hover table-positions">
                                     <tbody>
-                                    @if(count($adBoxesAdminAll))
+                                    @if(!is_null($adBoxesAdminAll) && $adBoxesAdminAll->isNotEmpty())
                                         @foreach($adBoxesAdminAll[$adBox->type] as $adBox)
                                             <tr class="pickPositionTr" data-position="{{$adBox->position}}">
                                                 <td>{{$adBox->position}}</td>
