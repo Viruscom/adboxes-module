@@ -285,7 +285,7 @@ class AdBoxesController extends Controller
 
         if ($adBox->existsFile($adBox->filename)) {
             $adBox->deleteFile($adBox->filename);
-            $adBox->update(['filename' => '']);
+            $adBox->update(['filename' => null]);
 
             AdBox::cacheUpdate();
 

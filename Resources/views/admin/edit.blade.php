@@ -383,15 +383,7 @@
                                 <hr>
                             </div>
                             <div class="col-lg-6 col-xs-12">
-                                <div class="form-group">
-                                    <label class="control-label col-lg-6">Активен (видим) в сайта:</label>
-                                    <div class="col-lg-6">
-                                        <label class="switch pull-left">
-                                            <input type="checkbox" name="active" class="success" data-size="small" checked {{(old('active') ? 'checked' : 'active')}}>
-                                            <span class="slider"></span>
-                                        </label>
-                                    </div>
-                                </div>
+                                @include('admin.partials.on_edit.active_checkbox', ['model' => $adBox])
                             </div>
 
                             @if (!$adBox->isWaitingAction())
@@ -409,15 +401,7 @@
                 </div>
             </div>
             <div class="col-sm-12 col-xs-12">
-                <div class="form-actions">
-                    <div class="row">
-                        <div class="col-md-offset-3 col-md-9">
-                            <button type="submit" name="submitaddnew" value="submitaddnew" class="btn green saveplusbtn margin-bottom-10"> запиши и добави нов</button>
-                            <button type="submit" name="submit" value="submit" class="btn save-btn margin-bottom-10"><i class="fas fa-save"></i> запиши</button>
-                            <a href="{{ route('ad-boxes') }}" role="button" class="btn back-btn margin-bottom-10"><i class="fa fa-reply"></i> назад</a>
-                        </div>
-                    </div>
-                </div>
+                @include('admin.partials.on_edit.form_actions_bottom')
             </div>
 
             @if(!$adBox->isWaitingAction())
@@ -433,7 +417,7 @@
                             <div class="modal-body">
                                 <table class="table table-striped table-hover table-positions">
                                     <tbody>
-                                    @if(!is_null($adBoxesAdminAll) && $adBoxesAdminAll->isNotEmpty())
+                                    @if(!is_null($adBoxesAdminAll) && count($adBoxesAdminAll))
                                         @foreach($adBoxesAdminAll[$adBox->type] as $adBox)
                                             <tr class="pickPositionTr" data-position="{{$adBox->position}}">
                                                 <td>{{$adBox->position}}</td>
