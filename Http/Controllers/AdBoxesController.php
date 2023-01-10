@@ -5,7 +5,6 @@ namespace Modules\AdBoxes\Http\Controllers;
 use App\Helpers\AdminHelper;
 use App\Helpers\LanguageHelper;
 use App\Helpers\MainHelper;
-use App\Models\Language;
 use Exception;
 use File;
 use Illuminate\Http\RedirectResponse;
@@ -231,20 +230,14 @@ class AdBoxesController extends Controller
     }
     public function editButton($adboxType)
     {
-        $adBoxButton = AdBoxButton::where('adbox_type', $adboxType)->first();
+        $adBoxButton = AdBoxButton::where('ad_box_type', $adboxType)->first();
         if (is_null($adBoxButton)) {
-            return redirect()->back()->withInput()->withErrors(['adboxes::admin.adboxes_actions.record_not_found']);
+            return redirect()->back()->withInput()->withErrors(['adboxes::admin.adboxes_actions.record_not_found_button']);
         }
 
-        $languages       = LanguageHelper::getActiveLanguages();
-        $defaultLanguage = Language::where('code', env('DEF_LANG_CODE'))->first();
-        $otherSettings   = OtherSetting::first();
+        $languages = LanguageHelper::getActiveLanguages();
 
-        $navigations       = Navigation::active(true)->with('translations')->with('content_pages')->orderBy('position')->get();
-        $brands            = Brand::active(true)->with('translations')->orderBy('position')->get();
-        $productCategories = ProductCategory::active(true)->with('translations')->with('products')->orderBy('position')->get();
-
-        return view('admin.adboxes.buttons.edit', compact('languages', 'defaultLanguage', 'otherSettings', 'navigations', 'brands', 'productCategories', 'adBoxButton'));
+        return view('adboxes::admin.buttons.edit', compact('languages', 'adBoxButton'));
     }
     public function active($id, $active): RedirectResponse
     {
@@ -257,23 +250,25 @@ class AdBoxesController extends Controller
     }
     public function updateButton($adboxType, Request $request)
     {
-        $adBoxButton = AdBoxButton::where('adbox_type', $adboxType)->first();
+        $adBoxButton = AdBoxButton::where('ad_box_type', $adboxType)->first();
         if (is_null($adBoxButton)) {
             return redirect()->back()->withInput()->withErrors(['adboxes::admin.adboxes_actions.record_not_found']);
         }
 
         $languages = LanguageHelper::getActiveLanguages();
         foreach ($languages as $language) {
-            $adBoxTranslation = $adBoxButton->where('adbox_type', $adBoxButton->adbox_type)->where('language_id', $language->id)->first();
+            $adBoxTranslation = $adBoxButton->where('ad_box_type', $adBoxButton->ad_box_type)->where('locale', $language->code)->first();
             if (is_null($adBoxTranslation)) {
-                $request['adbox_type'] = $adBoxButton->adbox_type;
+                $request['ad_box_type'] = $adBoxButton->ad_box_type;
                 $adBoxButton->create(AdBoxButton::getCreateData($language, $request));
             } else {
                 $adBoxTranslation->update($adBoxTranslation->getUpdateData($language, $request));
             }
         }
 
-        return redirect()->route('ad-boxes')->with('success-message', 'adboxes::admin.adboxes_actions.successful_edit');
+        AdBoxButton::cacheUpdate();
+
+        return redirect()->route('ad-boxes')->with('success-message', 'adboxes::admin.adboxes_actions.successful_edit_button');
     }
 
     public function imgDelete($id): RedirectResponse

@@ -159,7 +159,9 @@
                                 <label for="select_internal_link" class="control-label">Вътрешен линк (<span class="text-uppercase">{{$language->code}}</span>):</label>
                                 <div>
                                     <select id="select_internal_link" name="{{$langLink}}" class="form-control select2 select2-{{$language->code}}" style="width: 100%;">
-                                        <option value="">@lang('admin.common.please_select')</option>
+                                        @include('admin.partials.select_tag_internal_links', ['language' => $language->code, 'internalLinks' => $internalLinks])
+
+
                                         @if(array_key_exists('Page', $activeModules))
                                             <optgroup label="@lang('page::admin.pages.index')"></optgroup>
                                         @endif

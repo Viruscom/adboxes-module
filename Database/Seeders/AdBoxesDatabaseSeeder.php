@@ -2,8 +2,8 @@
 
 namespace Modules\AdBoxes\Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Seeder;
 
 class AdBoxesDatabaseSeeder extends Seeder
 {
@@ -12,10 +12,10 @@ class AdBoxesDatabaseSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         Model::unguard();
 
-        // $this->call("OthersTableSeeder");
+        $this->call(AdboxButtonsSeeder::class);
     }
 }

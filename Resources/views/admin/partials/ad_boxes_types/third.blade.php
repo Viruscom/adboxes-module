@@ -11,7 +11,7 @@
                 <th class="width-220 text-right">@lang('adboxes::admin.actions')</th>
                 </thead>
                 <tbody>
-                <?php $i = 1;?>
+                <?php $i = 1; ?>
                 @forelse ($adBoxesAdminAll[3] as $adBox)
                     <tr class="t-row row-{{$adBox->id}}" data-toggle="popover" data-content='<img class="thumbnail img-responsive" src="{{ $adBox->getFileUrl() }}"/>'>
                         <td class="width-2-percent">
@@ -48,14 +48,14 @@
                                 <tbody>
                                 <tr>
                                     <td>
-                                        <?php $l = 0;?>
+                                            <?php $l = 0; ?>
                                         @foreach($languages as $language)
-                                            <?php
-                                            $adTrans = $adBox->translate($language->code);
-                                            if (is_null($adTrans)) {
-                                                continue;
-                                            }
-                                            ?>
+                                                <?php
+                                                $adTrans = $adBox->translate($language->code);
+                                                if (is_null($adTrans)) {
+                                                    continue;
+                                                }
+                                                ?>
                                             @if($l <= 3)
                                                 <p>
                                                     <span>Линк ({{$language->code}}): </span>
@@ -64,7 +64,7 @@
 												</span>
                                                 </p>
                                             @endif
-                                            <?php $l++; ?>
+                                                <?php $l++; ?>
                                         @endforeach
                                     </td>
                                 </tr>
@@ -75,7 +75,7 @@
                             <img class="thumbnail img-responsive" src="{{ $adBox->getFileUrl() }}"/>
                         </td>
                     </tr>
-                    <?php $i++;?>
+                        <?php $i++; ?>
                 @empty
                     <tr>
                         <td colspan="5" class="no-table-rows">@lang('adboxes::admin.no_third_type_ad_boxes')</td>
@@ -89,6 +89,6 @@
 
 <div class="row">
     <div class="col-md-12">
-        <a href="{{ url('admin/adboxes/3/editButton') }}" class="btn btn-light-green">{{ (isset($adboxButtons[2]) && $adboxButtons[2]->title !='') ? $adboxButtons[2]->title : 'Бутон 3' }}</a>
+        <a href="{{ route('ad-boxes.edit-button', ['adBoxType' => 3]) }}" class="btn btn-light-green">{{ (isset($adboxButtons[2]) && $adboxButtons[2]->title !='') ? $adboxButtons[2]->title : 'Бутон 3' }}</a>
     </div>
 </div>
