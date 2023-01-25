@@ -35,14 +35,14 @@
 @section('content')
     @include('adboxes::admin.breadcrumbs')
     @include('admin.notify')
-    <form class="my-form" action="{{ route('ad-boxes.update-button', ['adBoxType' => $adBoxButton->ad_box_type]) }}" method="POST" data-form-type="store" enctype="multipart/form-data">
+    <form class="my-form" action="{{ route('admin.ad-boxes.update-button', ['adBoxType' => $adBoxButton->ad_box_type]) }}" method="POST" data-form-type="store" enctype="multipart/form-data">
         <div class="col-xs-12 p-0">
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
             <div class="bg-grey top-search-bar">
                 <div class="action-mass-buttons pull-right">
                     <button type="submit" name="submit" value="submit" class="btn btn-lg save-btn margin-bottom-10"><i class="fas fa-save"></i></button>
-                    <a href="{{ route('ad-boxes') }}" role="button" class="btn btn-lg back-btn margin-bottom-10"><i class="fa fa-reply"></i></a>
+                    <a href="{{ route('admin.ad-boxes.index') }}" role="button" class="btn btn-lg back-btn margin-bottom-10"><i class="fa fa-reply"></i></a>
                 </div>
             </div>
         </div>
@@ -88,7 +88,7 @@
                                 <label class="control-label">Вътрешен линк (<span class="text-uppercase">{{$language->code}}</span>):</label>
                                 <div>
                                     <select name="{{$langLink}}" class="form-control select2 select2-{{$language->code}}" style="width: 100%;" {{ (!is_null($adboxTranslation) && $adboxTranslation->external_url != 0) ? 'disabled': '' }}>
-
+                                        @include('admin.partials.on_edit.select_tag_internal_links', ['language' => $language->code, 'internalLinks' => $internalLinks, 'model' => $adBoxButton])
                                     </select>
                                 </div>
                             </div>

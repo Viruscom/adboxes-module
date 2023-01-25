@@ -26,19 +26,7 @@
                         <td><label class="label btn-light-yellow">@lang('adboxes::admin.ad_boxes_type_3')</label></td>
                         <td>{{ $adBox->title }}</td>
                         <td class="pull-right">
-                            <a href="{{ route('ad-boxes.edit', ['id' => $adBox->id]) }}" class="btn green" role="button"><i class="fas fa-pencil-alt"></i></a>
-                            @if(!$adBox->active)
-                                <a href="{{ route('ad-boxes.active', ['id' => $adBox->id, 'active' => 1]) }}" role="button" class="btn light-grey-eye visibility-activate"><i class="far fa-eye-slash"></i></a>
-                            @else
-                                <a href="{{ route('ad-boxes.active', ['id' => $adBox->id, 'active' => 0]) }}" role="button" class="btn grey-eye visibility-unactive"><i class="far fa-eye"></i></a>
-                            @endif
-                            @if($i !== 1)
-                                <a href="{{ url('/admin/adboxes/move/up/'.$adBox->id) }}" role="button" class="move-up btn yellow"><i class="fas fa-angle-up"></i></a>
-                            @endif
-                            @if($i != count($adBoxesAdminAll[3]))
-                                <a href="{{ url('/admin/adboxes/move/down/'.$adBox->id) }}" role="button" class="move-down btn yellow"><i class="fas fa-angle-down"></i></a>
-                            @endif
-                            <a href="{{ url('/admin/adboxes/'.$adBox->id.'/delete') }}" class="btn red" data-toggle="confirmation"><i class="fas fa-trash-alt"></i></a>
+                            @include('admin.partials.index.action_buttons', ['mainRoute' => Request::segment(2), 'models' => $adBoxesAdminAll[3], 'model' => $adBox, 'showInPublicModal' => false])
                         </td>
                     </tr>
                     <tr class="t-row-details row-{{$adBox->id}}-details hidden">
@@ -89,6 +77,6 @@
 
 <div class="row">
     <div class="col-md-12">
-        <a href="{{ route('ad-boxes.edit-button', ['adBoxType' => 3]) }}" class="btn btn-light-green">{{ (isset($adboxButtons[2]) && $adboxButtons[2]->title !='') ? $adboxButtons[2]->title : 'Бутон 3' }}</a>
+        <a href="{{ route('admin.ad-boxes.edit-button', ['adBoxType' => 3]) }}" class="btn btn-light-green">{{ (isset($adboxButtons[2]) && $adboxButtons[2]->title !='') ? $adboxButtons[2]->title : 'Бутон 3' }}</a>
     </div>
 </div>

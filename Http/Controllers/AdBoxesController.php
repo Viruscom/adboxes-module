@@ -55,7 +55,7 @@ class AdBoxesController extends Controller
             return redirect()->back()->with('success-message', 'adboxes::admin.adboxes_actions.successful_create');
         }
 
-        return redirect()->route('ad-boxes')->with('success-message', 'adboxes::admin.adboxes_actions.successful_create');
+        return redirect()->route('admin.ad-boxes.index')->with('success-message', 'adboxes::admin.adboxes_actions.successful_create');
     }
     public function create()
     {
@@ -122,7 +122,7 @@ class AdBoxesController extends Controller
 
         AdBox::cacheUpdate();
 
-        return redirect()->route('ad-boxes')->with('success-message', 'adboxes::admin.adboxes_actions.successful_edit');
+        return redirect()->route('admin.ad-boxes.index')->with('success-message', 'adboxes::admin.adboxes_actions.successful_edit');
     }
     public function deleteMultiple(Request $request): RedirectResponse
     {
@@ -174,7 +174,7 @@ class AdBoxesController extends Controller
             AdBox::whereIn('id', $ids)->update(['active' => $active]);
         }
 
-        return redirect()->route('ad-boxes')->with('success-message', 'adboxes::admin.adboxes_actions.successful_edit');
+        return redirect()->route('admin.ad-boxes.index')->with('success-message', 'adboxes::admin.adboxes_actions.successful_edit');
     }
     public function positionDown($id): RedirectResponse
     {
@@ -187,7 +187,7 @@ class AdBoxesController extends Controller
             $adBox->update(['position' => $adBox->position + 1]);
         }
 
-        return redirect()->route('ad-boxes')->with('success-message', 'adboxes::admin.adboxes_actions.successful_edit');
+        return redirect()->route('admin.ad-boxes.index')->with('success-message', 'adboxes::admin.adboxes_actions.successful_edit');
     }
     public function positionUp($id): RedirectResponse
     {
@@ -200,7 +200,7 @@ class AdBoxesController extends Controller
             $adBox->update(['position' => $adBox->position - 1]);
         }
 
-        return redirect()->route('ad-boxes')->with('success-message', 'adboxes::admin.adboxes_actions.successful_edit');
+        return redirect()->route('admin.ad-boxes.index')->with('success-message', 'adboxes::admin.adboxes_actions.successful_edit');
     }
     public function ajaxUpdatePositions($id, $position)
     {
@@ -226,7 +226,7 @@ class AdBoxesController extends Controller
 
         $adBox->update(['type' => 0]);
 
-        return redirect()->route('ad-boxes')->with('success-message', 'adboxes::admin.adboxes_actions.successful_edit');
+        return redirect()->route('admin.ad-boxes.index')->with('success-message', 'adboxes::admin.adboxes_actions.successful_edit');
     }
     public function editButton($adboxType)
     {
@@ -235,9 +235,13 @@ class AdBoxesController extends Controller
             return redirect()->back()->withInput()->withErrors(['adboxes::admin.adboxes_actions.record_not_found_button']);
         }
 
-        $languages = LanguageHelper::getActiveLanguages();
+        $data = [
+            'adBoxButton' => $adBoxButton,
+            'languages'   => LanguageHelper::getActiveLanguages(),
+        ];
+        $data = AdminHelper::getInternalLinksUrls($data);
 
-        return view('adboxes::admin.buttons.edit', compact('languages', 'adBoxButton'));
+        return view('adboxes::admin.buttons.edit', $data);
     }
     public function active($id, $active): RedirectResponse
     {
@@ -246,7 +250,7 @@ class AdBoxesController extends Controller
 
         $adBox->update(['active' => $active]);
 
-        return redirect()->route('ad-boxes')->with('success-message', 'adboxes::admin.adboxes_actions.successful_edit');
+        return redirect()->route('admin.ad-boxes.index')->with('success-message', 'adboxes::admin.adboxes_actions.successful_edit');
     }
     public function updateButton($adboxType, Request $request)
     {
@@ -268,7 +272,7 @@ class AdBoxesController extends Controller
 
         AdBoxButton::cacheUpdate();
 
-        return redirect()->route('ad-boxes')->with('success-message', 'adboxes::admin.adboxes_actions.successful_edit_button');
+        return redirect()->route('admin.ad-boxes.index')->with('success-message', 'adboxes::admin.adboxes_actions.successful_edit_button');
     }
 
     public function imgDelete($id): RedirectResponse
