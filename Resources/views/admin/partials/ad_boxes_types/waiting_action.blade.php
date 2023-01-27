@@ -11,7 +11,7 @@
                 <th class="width-220 text-right">@lang('adboxes::admin.actions')</th>
                 </thead>
                 <tbody>
-                <?php $i = 1;?>
+                <?php $i = 1; ?>
                 @forelse ($adBoxesAdminAll['waitingAction'] as $adBox)
                     <tr class="t-row row-{{$adBox->id}}">
                         <td class="width-2-percent">
@@ -28,8 +28,8 @@
                             {{ $adBox->title }}
                         </td>
                         <td class="pull-right">
-                            <a href="{{ route('ad-boxes.edit', ['id' => $adBox->id]) }}" class="btn green" role="button"><i class="fas fa-pencil-alt"></i></a>
-                            <a href="{{ url('/admin/adboxes/'.$adBox->id.'/delete') }}" class="btn red" data-toggle="confirmation"><i class="fas fa-trash-alt"></i></a>
+                            <a href="{{ route('admin.ad-boxes.edit', ['id' => $adBox->id]) }}" class="btn green" role="button"><i class="fas fa-pencil-alt"></i></a>
+                            <a href="{{ route('admin.ad-boxes.delete', ['id' => $adBox->id]) }}" class="btn red btn-delete-confirm tooltips" data-toggle="tooltip" data-placement="auto" title="" data-original-title="{{ __('admin.delete') }}"><i class="fas fa-trash-alt"></i></a>
                         </td>
                     </tr>
                     <tr class="t-row-details row-{{$adBox->id}}-details hidden">
@@ -37,7 +37,7 @@
                         <td colspan="2"></td>
                         <td class="width-220"></td>
                     </tr>
-                    <?php $i++;?>
+                        <?php $i++; ?>
                 @empty
                     <tr>
                         <td colspan="5" class="no-table-rows">@lang('adboxes::admin.no_waiting_action_ad_boxes')</td>

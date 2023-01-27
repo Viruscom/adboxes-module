@@ -66,7 +66,7 @@
 @section('content')
     @include('adboxes::admin.breadcrumbs')
     @include('admin.notify')
-    <form class="my-form" action="{{ route('ad-boxes.store') }}" method="POST" data-form-type="store" enctype="multipart/form-data">
+    <form class="my-form" action="{{ route('admin.ad-boxes.store') }}" method="POST" data-form-type="store" enctype="multipart/form-data">
         <div class="col-xs-12 p-0">
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <input type="hidden" name="position" value="{{old('position')}}">
@@ -74,7 +74,7 @@
                 <div class="action-mass-buttons pull-right">
                     <button type="submit" name="submitaddnew" value="submitaddnew" class="btn btn-lg green saveplusicon margin-bottom-10"></button>
                     <button type="submit" name="submit" value="submit" class="btn btn-lg save-btn margin-bottom-10"><i class="fas fa-save"></i></button>
-                    <a href="{{ route('ad-boxes') }}" role="button" class="btn btn-lg back-btn margin-bottom-10"><i class="fa fa-reply"></i></a>
+                    <a href="{{ route('admin.ad-boxes.index') }}" role="button" class="btn btn-lg back-btn margin-bottom-10"><i class="fa fa-reply"></i></a>
                 </div>
             </div>
         </div>
@@ -313,7 +313,7 @@
                         <div class="col-md-offset-3 col-md-9">
                             <button type="submit" name="submitaddnew" value="submitaddnew" class="btn green saveplusbtn margin-bottom-10"> запиши и добави нов</button>
                             <button type="submit" name="submit" value="submit" class="btn save-btn margin-bottom-10"><i class="fas fa-save"></i> запиши</button>
-                            <a href="{{ route('ad-boxes') }}" role="button" class="btn back-btn margin-bottom-10"><i class="fa fa-reply"></i> назад</a>
+                            <a href="{{ route('admin.ad-boxes.index') }}" role="button" class="btn back-btn margin-bottom-10"><i class="fa fa-reply"></i> назад</a>
                         </div>
                     </div>
                 </div>

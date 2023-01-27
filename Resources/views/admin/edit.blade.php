@@ -65,7 +65,7 @@
 @section('content')
     @include('adboxes::admin.breadcrumbs')
     @include('admin.notify')
-    <form class="my-form" action="{{ route('ad-boxes.update', ['id'=>$adBox->id]) }}" method="POST" data-form-type="store" enctype="multipart/form-data">
+    <form class="my-form" action="{{ route('admin.ad-boxes.update', ['id'=>$adBox->id]) }}" method="POST" data-form-type="store" enctype="multipart/form-data">
         <div class="col-xs-12 p-0">
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <input type="hidden" name="position" value="{{(old('position')) ?: $adBox->position}}">
@@ -75,9 +75,9 @@
                 <div class="action-mass-buttons pull-right">
                     <button type="submit" name="submit" value="submit" class="btn btn-lg save-btn margin-bottom-10"><i class="fas fa-save"></i></button>
                     @if (!$adBox->isWaitingAction())
-                        <a href="{{ route('ad-boxes.return-to-waiting', ['id'=>$adBox->id]) }}" role="button" class="btn btn-lg btn yellow margin-bottom-10 tooltips" style="padding: 8px 10px;" data-toggle="tooltip" data-placement="left" data-original-title="Върни карето в изчакващи"><img src="{{ asset('admin/assets/images/back_to_wait.svg') }}" width="23px"></a>
+                        <a href="{{ route('admin.ad-boxes.return-to-waiting', ['id'=>$adBox->id]) }}" role="button" class="btn btn-lg btn yellow margin-bottom-10 tooltips" style="padding: 8px 10px;" data-toggle="tooltip" data-placement="left" data-original-title="Върни карето в изчакващи"><img src="{{ asset('admin/assets/images/back_to_wait.svg') }}" width="23px"></a>
                     @endif
-                    <a href="{{ route('ad-boxes') }}" role="button" class="btn btn-lg back-btn margin-bottom-10"><i class="fa fa-reply"></i></a>
+                    <a href="{{ route('admin.ad-boxes.index') }}" role="button" class="btn btn-lg back-btn margin-bottom-10"><i class="fa fa-reply"></i></a>
                 </div>
             </div>
         </div>
@@ -167,79 +167,11 @@
 
                             <div class="form-group {{ (!is_null($adTrans) && $adTrans->external_url !== 0) ? 'hidden': '' }}">
                                 <label class="control-label">Вътрешен линк (<span class="text-uppercase">{{$language->code}}</span>) <span class="text-purple">Моля, изберете</span>:</label>
-                                {{--                                <div>--}}
-                                {{--                                    <select name="{{$langLink}}" class="form-control select2 select2-{{$language->code}}" style="width: 100%;" {{ (!is_null($adboxTranslation) && $adboxTranslation->external_url != 0) ? 'disabled': '' }}>--}}
-                                {{--                                        @foreach($navigations as $navigation)--}}
-                                {{--                                            @php--}}
-                                {{--                                                $navTranslation = $navigation->getTranslation($language->id)->first();--}}
-                                {{--                                                if(is_null($navTranslation)){--}}
-                                {{--                                                    continue;--}}
-                                {{--                                                }--}}
-                                {{--                                                $pages = $navigation->content_pages()->orderBy('position')->get();--}}
-                                {{--                                                $url = ($navigation->isHomeModule()) ? $language->code.'/': $language->code.'/page/'.$navTranslation->slug;--}}
-                                {{--                                            @endphp--}}
-                                {{--                                            <option value="{{$url}}" {{ ($adboxTranslation->url == $url) ? 'selected': ''}}>{{$navTranslation->title}}</option>--}}
-                                {{--                                            @if($navigation->isBrandModule())--}}
-                                {{--                                                @foreach($brands as $brand)--}}
-                                {{--                                                    @php--}}
-                                {{--                                                        $brandTranslation = $brand->translations()->where('language_id', $language->id)->first();--}}
-                                {{--                                                        if(is_null($brandTranslation)){--}}
-                                {{--                                                            continue;--}}
-                                {{--                                                        }--}}
-                                {{--                                                    @endphp--}}
-                                {{--                                                    <option value="{{$url.'/'.$brandTranslation->slug}}" {{ ($adboxTranslation->url == $url.'/'.$brandTranslation->slug) ? 'selected': ''}}><span>&#8226;</span> {{$brandTranslation->title}}</option>--}}
-                                {{--                                                @endforeach--}}
-                                {{--                                            @else--}}
-                                {{--                                                @foreach($pages as $page)--}}
-                                {{--                                                    @php--}}
-                                {{--                                                        $pageTranslation = $page->translations()->where('language_id', $language->id)->first();--}}
-                                {{--                                                        if(is_null($pageTranslation)){--}}
-                                {{--                                                            continue;--}}
-                                {{--                                                        }--}}
-                                {{--                                                    @endphp--}}
-                                {{--                                                    <option value="{{$url.'/'.$pageTranslation->slug}}" {{ ($adboxTranslation->url == $url.'/'.$pageTranslation->slug) ? 'selected': ''}}><span>&#8226;</span> {{$pageTranslation->title}}</option>--}}
-                                {{--                                                @endforeach--}}
-                                {{--                                            @endif--}}
-
-                                {{--                                            @if($navigation->isHotelModule())--}}
-                                {{--                                                <optgroup label="@lang('administration_messages.module_11')">--}}
-                                {{--                                                    @php--}}
-                                {{--                                                        $hotels = $navigation->hotels()->orderBy('position', 'asc')->get();--}}
-                                {{--                                                    @endphp--}}
-                                {{--                                                    @foreach($hotels as $hotel)--}}
-                                {{--                                                        @php--}}
-                                {{--                                                            $hotelTranslation = $hotel->translations->where('language_id', $language->id)->first();--}}
-                                {{--                                                        @endphp--}}
-                                {{--                                                        <option value="{{$language->code.'/page/'.$navTranslation->slug.'/'.$hotelTranslation->slug}}" {{ ($adboxTranslation->url == $url.'/'.$hotelTranslation->slug) ? 'selected': ''}}> - - {{--}}
-                                {{--                                                        $hotelTranslation->title}}</option>--}}
-                                {{--                                                    @endforeach--}}
-                                {{--                                                </optgroup>--}}
-                                {{--                                            @endif--}}
-                                {{--                                        @endforeach--}}
-                                {{--                                        <optgroup label="Продуктови категории и продукти">--}}
-                                {{--                                            @foreach($productCategories as $productCategory)--}}
-                                {{--                                                @php--}}
-                                {{--                                                    $productCategoryTranslation = $productCategory->translations()->where('language_id', $language->id)->first();--}}
-                                {{--                                                    $navTranslation = $productCategory->navigation->translations()->where('language_id', $language->id)->first();--}}
-                                {{--                                                    if(is_null($navTranslation)){--}}
-                                {{--                                                        continue;--}}
-                                {{--                                                    }--}}
-                                {{--                                                    $products = $productCategory->products()->orderBy('position')->get();--}}
-                                {{--                                                @endphp--}}
-                                {{--                                                <option value="{{$language->code.'/product_category/'.$navTranslation->slug.'/'.$productCategoryTranslation->slug}}" {{ ($adboxTranslation->url == $language->code.'/product_category/'.$productCategoryTranslation->slug) ? 'selected': ''}}>{{$productCategoryTranslation->title}}</option>--}}
-                                {{--                                                @foreach($products as $product)--}}
-                                {{--                                                    @php--}}
-                                {{--                                                        $productTranslation = $product->translations()->where('language_id', $language->id)->first();--}}
-                                {{--                                                        if(is_null($pageTranslation)){--}}
-                                {{--                                                            continue;--}}
-                                {{--                                                        }--}}
-                                {{--                                                    @endphp--}}
-                                {{--                                                    <option value="{{$language->code.'/product_category/'.$navTranslation->slug.'/'.$productCategoryTranslation->slug.'/'.$productTranslation->slug}}" {{ ($adboxTranslation->url == $language->code.'/product_category/'.$navTranslation->slug.'/'.$productCategoryTranslation->slug.'/'.$productTranslation->slug) ? 'selected': ''}}><span>&#8226;</span> {{$productTranslation->title}}</option>--}}
-                                {{--                                                @endforeach--}}
-                                {{--                                            @endforeach--}}
-                                {{--                                        </optgroup>--}}
-                                {{--                                    </select>--}}
-                                {{--                                </div>--}}
+                                <div>
+                                    <select name="{{$langLink}}" class="form-control select2 select2-{{$language->code}}" style="width: 100%;" {{ (!is_null($adTrans) && $adTrans->external_url != 0) ? 'disabled': '' }}>
+                                        @include('admin.partials.on_edit.select_tag_internal_links', ['language' => $language->code, 'internalLinks' => $internalLinks, 'model' => $adBox])
+                                    </select>
+                                </div>
                             </div>
 
                             <div class="row">
@@ -361,7 +293,7 @@
                                             <div>
                                                 @if ($adBox->existsFile($adBox->filename))
                                                     <div class="overlay-delete-img hidden">
-                                                        <a href="{{ route('ad-boxes.delete-img', ['id'=>$adBox->id]) }}" class="del-link del-link-ajax"><i class="fas fa-times"></i>
+                                                        <a href="{{ route('admin.ad-boxes.delete-image', ['id'=>$adBox->id]) }}" class="del-link del-link-ajax"><i class="fas fa-times"></i>
                                                             <p>Изтрий</p></a>
                                                     </div>
                                                     <img class="thumbnail content-box1 has-img img-responsive" src="{{ $adBox->getFileUrl() }}" width="300"/>

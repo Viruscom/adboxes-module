@@ -62,7 +62,7 @@ class AdBox extends Model implements TranslatableContract
             case 1:
                 return self::$FIRST_TYPE;
             case 2:
-                return self::$SECOND_TYPEs;
+                return self::$SECOND_TYPE;
             case 3:
                 return self::$THIRD_TYPE;
             case 4:
@@ -100,7 +100,6 @@ class AdBox extends Model implements TranslatableContract
         static::deleted(static function (AdBox $adBox) {
             self::cacheUpdate();
             activity()->causedBy(\auth()->user())->log('[Рекламни карета] Изтрито е каре "' . $adBox->title . '" от потребител:  ' . \auth()->user()->name);
-            $adBox->deleteDirectory($adBox->getFilesPath());
         });
     }
     /**
@@ -131,10 +130,6 @@ class AdBox extends Model implements TranslatableContract
         $array[self::$FOURTH_TYPE] = self::fourthType()->orderByPosition('asc')->withTranslation()->with('translations')->get();
 
         return $array;
-    }
-    public function getFilesPath(): string
-    {
-        return self::FILES_PATH . '/' . $this->id . '/';
     }
     public function directoryPath()
     {
@@ -374,7 +369,10 @@ class AdBox extends Model implements TranslatableContract
     {
         return $this->getFilesPath() . $filename;
     }
-
+    public function getFilesPath(): string
+    {
+        return self::FILES_PATH . '/' . $this->id . '/';
+    }
     public function getAnnounce(): string
     {
         return Str::limit($this->short_description, 255, ' ...');

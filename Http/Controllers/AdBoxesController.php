@@ -2,11 +2,11 @@
 
 namespace Modules\AdBoxes\Http\Controllers;
 
+use App\Actions\CommonControllerAction;
 use App\Helpers\AdminHelper;
 use App\Helpers\LanguageHelper;
 use App\Helpers\MainHelper;
 use Exception;
-use File;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -81,6 +81,8 @@ class AdBoxesController extends Controller
         $data['adBoxesAdminAll'] = Cache::get('adBoxesAdminAll');
         $data['fileRules']       = AdBox::getFileRulesForView();
 
+        $data = AdminHelper::getInternalLinksUrls($data);
+
         //
         //        $navigations       = Navigation::active(true)->with('translations')->with('content_pages')->orderBy('position')->get();
         //        $brands            = Brand::active(true)->with('translations')->orderBy('position')->get();
@@ -124,39 +126,25 @@ class AdBoxesController extends Controller
 
         return redirect()->route('admin.ad-boxes.index')->with('success-message', 'adboxes::admin.adboxes_actions.successful_edit');
     }
-    public function deleteMultiple(Request $request): RedirectResponse
+    public function deleteMultiple(Request $request, CommonControllerAction $action): RedirectResponse
     {
+        dd($request->all());
         if (!is_null($request->ids[0])) {
-            $ids = array_map('intval', explode(',', $request->ids[0]));
-            foreach ($ids as $id) {
-                $adBox = AdBox::find($id);
-                if (is_null($adBox)) {
-                    continue;
-                }
+            $action->deleteMultiple($request, AdBox::class);
 
-                if (file_exists($adBox->imagePath())) {
-                    File::delete($adBox->imagePath());
-                }
-
-                $adBoxesToUpdate = AdBox::where('type', $adBox->type)->where('position', '>', $adBox->position)->get();
-                $adBox->delete();
-                foreach ($adBoxesToUpdate as $adBoxToUpdate) {
-                    $adBoxToUpdate->update(['position' => $adBoxToUpdate->position - 1]);
-                }
-            }
-
-            return redirect()->back()->with('success-message', 'adboxes::admin.adboxes_actions.successful_delete');
+            return redirect()->back()->with('success-message', 'admin.common.successful_delete');
         }
 
-        return redirect()->back()->withErrors(['administration_messages.no_checked_checkboxes']);
+        return redirect()->back()->withErrors(['admin.common.no_checked_checkboxes']);
     }
+
     public function delete($id): RedirectResponse
     {
         $adBox = AdBox::find($id);
         MainHelper::goBackIfNull($adBox);
 
-        if (file_exists($adBox->imagePath())) {
-            File::delete($adBox->imagePath());
+        if ($adBox->existsFile($adBox->filename)) {
+            $adBox->deleteFile($adBox->filename);
         }
 
         $adBoxesToUpdate = AdBox::where('type', $adBox->type)->where('position', '>', $adBox->position)->get();
@@ -165,14 +153,13 @@ class AdBoxesController extends Controller
             $adBoxToUpdate->update(['position' => $adBoxToUpdate->position - 1]);
         }
 
+        AdBox::cacheUpdate();
+
         return redirect()->back()->with('success-message', 'adboxes::admin.adboxes_actions.successful_delete');
     }
-    public function activeMultiple($active, Request $request)
+    public function activeMultiple($active, Request $request, CommonControllerAction $action): RedirectResponse
     {
-        if (!is_null($request->ids[0])) {
-            $ids = array_map('intval', explode(',', $request->ids[0]));
-            AdBox::whereIn('id', $ids)->update(['active' => $active]);
-        }
+        $action->activeMultiple(AdBox::class, $request, $active);
 
         return redirect()->route('admin.ad-boxes.index')->with('success-message', 'adboxes::admin.adboxes_actions.successful_edit');
     }
@@ -252,7 +239,7 @@ class AdBoxesController extends Controller
 
         return redirect()->route('admin.ad-boxes.index')->with('success-message', 'adboxes::admin.adboxes_actions.successful_edit');
     }
-    public function updateButton($adboxType, Request $request)
+    public function updateButton($adboxType, Request $request): RedirectResponse
     {
         $adBoxButton = AdBoxButton::where('ad_box_type', $adboxType)->first();
         if (is_null($adBoxButton)) {
