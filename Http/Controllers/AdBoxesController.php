@@ -128,7 +128,6 @@ class AdBoxesController extends Controller
     }
     public function deleteMultiple(Request $request, CommonControllerAction $action): RedirectResponse
     {
-        dd($request->all());
         if (!is_null($request->ids[0])) {
             $action->deleteMultiple($request, AdBox::class);
 

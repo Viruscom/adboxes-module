@@ -14,7 +14,7 @@ class AdboxButtonsSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         $languages  = Language::all();
         $adBoxTypes = AdBox::getTypes();
@@ -22,9 +22,9 @@ class AdboxButtonsSeeder extends Seeder
         foreach ($languages as $language) {
             foreach ($adBoxTypes as $adBoxType) {
                 AdBoxButton::create([
-                                        'language_id'  => $language->id,
-                                        'adbox_type'   => $adBoxType,
-                                        'title'        => trans('adboxes::admin.button_after_ad_boxes') . $adBoxType,
+                                        'locale'       => $language->code,
+                                        'ad_box_type'  => $adBoxType,
+                                        'title'        => trans('adboxes::admin.button_after_ad_boxes') . ' ' . $adBoxType,
                                         'url'          => '/',
                                         'external_url' => 0,
                                         'visible'      => 1]
