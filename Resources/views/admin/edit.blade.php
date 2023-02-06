@@ -17,15 +17,17 @@
             });
             @endforeach
             function adBoxExternalLinkToggle(el, languageCode) {
+                let select   = $('.select2-' + languageCode + '');
+                let inputUrl = $('input[name="url_' + languageCode + '"]');
                 if (el.val() == "on" && $('.select2-' + languageCode).parents('.form-group').hasClass('hidden')) {
-                    $('.select2-' + languageCode + '').removeClass('hidden').removeAttr('disabled');
-                    $('.select2-' + languageCode + '').parents('.form-group').removeClass('hidden');
-                    $('input[name="url_' + languageCode + '"]').parent().addClass('hidden');
+                    select.removeClass('hidden').removeAttr('disabled');
+                    select.parents('.form-group').removeClass('hidden');
+                    inputUrl.parent().addClass('hidden');
                 } else {
-                    $('.select2-' + languageCode + '').addClass('hidden').attr('disabled', 'disabled');
-                    $('.select2-' + languageCode + '').parents('.form-group').addClass('hidden');
-                    $('input[name="url_' + languageCode + '"]').parent().removeClass('hidden');
-                    $('input[name="url_' + languageCode + '"]').val('');
+                    select.addClass('hidden').attr('disabled', 'disabled');
+                    select.parents('.form-group').addClass('hidden');
+                    inputUrl.parent().removeClass('hidden');
+                    inputUrl.val('');
                 }
             }
         });
@@ -108,19 +110,14 @@
             <div class="col-sm-6 col-xs-12">
                 <ul class="nav nav-tabs">
                     @foreach($languages as $language)
-                        <li @if($language->code === config('default.app.admin_language.code')) class="active" @endif}}><a data-toggle="tab" href="#{{$language->code}}">{{$language->code}} <span class="err-span-{{$language->code}} hidden text-purple"><i class="fas fa-exclamation"></i></span></a></li>
+                        <li @if($language->code === config('default.app.admin_language.code')) class="active" @endif><a data-toggle="tab" href="#{{$language->code}}">{{$language->code}} <span class="err-span-{{$language->code}} hidden text-purple"><i class="fas fa-exclamation"></i></span></a></li>
                     @endforeach
                 </ul>
                 <div class="tab-content">
                     @foreach($languages as $language)
                             <?php
-                            $adTrans         = $adBox->translate($language->code);
-                            $langTitle       = 'title_' . $language->code;
-                            $langType        = 'type_' . $language->code;
-                            $langShortDescr  = 'short_description_' . $language->code;
-                            $langVisible     = 'visible_' . $language->code;
-                            $langLink        = 'url_' . $language->code;
-                            $langExternalUrl = 'external_url_' . $language->code;
+                            $adTrans        = $adBox->translate($language->code);
+                            $langShortDescr = 'short_description_' . $language->code;
                             if (is_null($adTrans)) {
                                 continue;
                             }
@@ -129,75 +126,37 @@
                         <div id="{{$language->code}}" class="tab-pane fade in @if($language->code === config('default.app.language.code')) active @endif">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <div class="form-group @if($errors->has($langTitle)) has-error @endif">
-                                        <label class="control-label p-b-10"><span class="text-purple">* </span>Заглавие (<span class="text-uppercase">{{$language->code}}</span>):</label>
-                                        <input class="form-control" type="text" name="{{$langTitle}}" value="{{ old($langTitle) ?: $adTrans->title }}" required>
-                                        @if($errors->has($langTitle))
-                                            <span class="help-block">{{ trans($errors->first($langTitle)) }}</span>
-                                        @endif
-                                    </div>
+                                    @include('admin.partials.on_edit.form_fields.input_text', ['model'=> $adBox, 'fieldName' => 'title_' . $language->code, 'label' => trans('admin.title'), 'required' => true])
                                 </div>
 
                                 <div class="col-md-6">
-                                    <div class="form-group @if($errors->has($langType)) has-error @endif">
-                                        <label class="control-label p-b-10">Етикет (<span class="text-uppercase">{{$language->code}}</span>):</label>
-                                        <input class="form-control" type="text" name="{{$langType}}" value="{{ old($langType) ?: $adTrans->type }}" placeholder="Услуга">
-                                        @if($errors->has($langType))
-                                            <span class="help-block">{{ trans($errors->first($langType)) }}</span>
-                                        @endif
-                                    </div>
+                                    @include('admin.partials.on_edit.form_fields.input_text', ['model'=> $adBox, 'fieldName' => 'label_' . $language->code, 'label' => trans('admin.label'), 'required' => false])
                                 </div>
                             </div>
 
                             <div class="form-group @if($errors->has($langShortDescr)) has-error @endif">
-                                <label class="control-label p-b-10">Кратко описание (<span class="text-uppercase">{{$language->code}}</span>):</label>
+                                <label class="control-label p-b-10">{{ __('admin.description') }} (<span class="text-uppercase">{{$language->code}}</span>):</label>
                                 <textarea name="{{$langShortDescr}}" class="form-control" rows="3">{{ old($langShortDescr) ?: $adTrans->short_description }}</textarea>
                                 @if($errors->has($langShortDescr))
                                     <span class="help-block">{{ trans($errors->first($langShortDescr)) }}</span>
                                 @endif
                             </div>
 
-                            <div class="form-group @if($errors->has($langLink)) has-error @endif hidden">
-                                <label class="control-label p-b-10"><span class="text-purple">* </span> Линк (<span class="text-uppercase">{{$language->code}}</span>):</label>
-                                <input class="form-control" type="text" name="{{$langLink}}" value="{{ old($langLink) }}">
-                                @if($errors->has($langLink))
-                                    <span class="help-block">{{ trans($errors->first($langLink)) }}</span>
-                                @endif
-                            </div>
+                            @include('admin.partials.on_edit.form_fields.link_input', ['model'=> $adBox, 'fieldName' => 'url_' . $language->code, 'label' => trans('admin.common.link'), 'required' => true])
+                            @include('admin.partials.on_edit.internal_link_select', ['fieldName' => 'url_' . $language->code, 'model' => $adBox])
 
                             <div class="form-group {{ (!is_null($adTrans) && $adTrans->external_url !== 0) ? 'hidden': '' }}">
                                 <label class="control-label">Вътрешен линк (<span class="text-uppercase">{{$language->code}}</span>) <span class="text-purple">Моля, изберете</span>:</label>
                                 <div>
-                                    <select name="{{$langLink}}" class="form-control select2 select2-{{$language->code}}" style="width: 100%;" {{ (!is_null($adTrans) && $adTrans->external_url != 0) ? 'disabled': '' }}>
+                                    <select name="{{'url_' . $language->code}}" class="form-control select2 select2-{{$language->code}}" style="width: 100%;" {{ (!is_null($adTrans) && $adTrans->external_url !== 0) ? 'disabled': '' }}>
                                         @include('admin.partials.on_edit.select_tag_internal_links', ['language' => $language->code, 'internalLinks' => $internalLinks, 'model' => $adBox])
                                     </select>
                                 </div>
                             </div>
 
                             <div class="row">
-                                <div class="col-lg-6 col-xs-12">
-                                    <div class="form-group m-t-10">
-                                        <label class="control-label col-lg-6 text-right p-t-7 p-l-0">Външен линк (<span class="text-uppercase">{{$language->code}}</span>):</label>
-                                        <div class="col-lg-6 p-l-0">
-                                            <label class="switch pull-left">
-                                                <input type="checkbox" name="{{$langExternalUrl}}" class="success" data-size="small" {{(old($langExternalUrl) ? 'checked' : 'active')}}>
-                                                <span class="slider"></span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-6 col-xs-12">
-                                    <div class="form-group m-t-10">
-                                        <label class="control-label col-lg-6 text-right p-t-7 p-l-0">Покажи в езикова версия (<span class="text-uppercase">{{$language->code}}</span>):</label>
-                                        <div class="col-lg-6 p-l-0">
-                                            <label class="switch pull-left">
-                                                <input type="checkbox" name="{{$langVisible}}" class="success" data-size="small" {{(old($langVisible) ? 'checked' : ($adTrans->visible ? 'checked': 'active'))}}>
-                                                <span class="slider"></span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
+                                @include('admin.partials.on_edit.external_link_checkbox', ['fieldName' => 'external_url_' . $language->code, 'model' => $adBox])
+                                @include('admin.partials.on_edit.show_in_language_visibility_checkbox', ['fieldName' => 'visible_' . $language->code, 'model' => $adTrans])
                             </div>
 
                         </div>
@@ -239,35 +198,6 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-lg-6 col-xs-12">
-                            {{--                            @if($otherSettings->adboxes_show_dates)--}}
-                            {{--                                <div class="form-group @if($errors->has('date_from_to')) has-error @endif">--}}
-                            {{--                                    <label class="control-label m-b-10">За период (от-до):</label>--}}
-                            {{--                                    <div class="input-group m-b-10">--}}
-                            {{--                                        <div class="input-group-addon">От дата</div>--}}
-                            {{--                                        <input type="text" class="form-control" value="{{ old('from_date') ?: $adBox->from_date }}" name="from_date" id="dpd1" autocomplete="off">--}}
-                            {{--                                    </div>--}}
-                            {{--                                    <div class="input-group">--}}
-                            {{--                                        <div class="input-group-addon">До дата</div>--}}
-                            {{--                                        <input type="text" class="form-control" value="{{ old('to_date') ?: $adBox->to_date }}" name="to_date" id="dpd2" autocomplete="off">--}}
-                            {{--                                    </div>--}}
-                            {{--                                    @if($errors->has('date_from_to'))--}}
-                            {{--                                        <span class="help-block">{{ trans($errors->first('date_from_to')) }}</span>--}}
-                            {{--                                    @endif--}}
-                            {{--                                </div>--}}
-                            {{--                            @else--}}
-                            {{--                                <div class="@if($errors->has('date')) has-error @endif">--}}
-                            {{--                                    <label class="control-label">Обратен брояч:</label>--}}
-                            {{--                                    <div class="input-group m-b-10">--}}
-                            {{--                                        <div class="input-group-addon">Дата</div>--}}
-                            {{--                                        <input type="text" class="form-control" value="{{ old('date') ?: $adBox->date }}" name="date" id="oneDayEventPicker" autocomplete="off">--}}
-                            {{--                                    </div>--}}
-                            {{--                                    @if($errors->has('date'))--}}
-                            {{--                                        <span class="help-block">{{ trans($errors->first('date')) }}</span>--}}
-                            {{--                                    @endif--}}
-                            {{--                                </div>--}}
-                            {{--                            @endif--}}
                         </div>
 
                         @if (!$adBox->isWaitingAction())

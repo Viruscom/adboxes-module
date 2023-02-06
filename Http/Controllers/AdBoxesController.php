@@ -83,11 +83,6 @@ class AdBoxesController extends Controller
 
         $data = AdminHelper::getInternalLinksUrls($data);
 
-        //
-        //        $navigations       = Navigation::active(true)->with('translations')->with('content_pages')->orderBy('position')->get();
-        //        $brands            = Brand::active(true)->with('translations')->orderBy('position')->get();
-        //        $productCategories = ProductCategory::active(true)->with('translations')->with('products')->orderBy('position')->get();
-
         return view('adboxes::admin.edit', $data);
     }
 

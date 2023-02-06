@@ -46,7 +46,7 @@ class AdBox extends Model implements TranslatableContract
     public static string $AD_BOX_4_MAX_FILE_SIZE = "3000";
 
 
-    public    $translatedAttributes = ['title', 'short_description', 'visible', 'url', 'external_url'];
+    public    $translatedAttributes = ['title', 'label', 'short_description', 'visible', 'url', 'external_url'];
     protected $fillable             = ['type', 'page_id', 'product_id', 'active', 'position', 'created_by', 'updated_bg', 'filename', 'date', 'from_date', 'to_date', 'price', 'from_price', 'new_price', 'from_new_price'];
     public static function getTypes(): array
     {

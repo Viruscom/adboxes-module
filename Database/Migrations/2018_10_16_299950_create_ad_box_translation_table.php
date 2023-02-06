@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateAdBoxTranslationTable extends Migration
 {
@@ -18,7 +18,7 @@ class CreateAdBoxTranslationTable extends Migration
             $table->integer('ad_box_id')->unsigned();
             $table->string('locale')->index();
             $table->string('title');
-            $table->string('type')->nullable()->default(null);
+            $table->string('label')->nullable()->default(null);
             $table->text('short_description')->nullable()->default(null);
             $table->text('url')->nullable()->default(null);
             $table->boolean('external_url')->default(false);

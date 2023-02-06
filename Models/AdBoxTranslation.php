@@ -7,27 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 class AdBoxTranslation extends Model
 {
     protected $table    = "ad_box_translation";
-    protected $fillable = ['locale', 'ad_box_id', 'title', 'type', 'short_description', 'url', 'external_url', 'visible'];
-
-    public function adbox()
-    {
-        return $this->belongsTo(AdBox::class, 'ad_box_id');
-    }
-
-    public function language()
-    {
-        return $this->belongsTo(Language::class, 'language_id');
-    }
-
+    protected $fillable = ['locale', 'ad_box_id', 'title', 'label', 'short_description', 'url', 'external_url', 'visible'];
     public static function getLanguageArray($language, $request)
     {
         $data = [
             'locale' => $language->code,
-            'title'       => $request['title_' . $language->code]
+            'title'  => $request['title_' . $language->code]
         ];
 
-        if ($request->has('type_' . $language->code)) {
-            $data['type'] = $request['type_' . $language->code];
+        if ($request->has('label_' . $language->code)) {
+            $data['label'] = $request['label_' . $language->code];
         }
 
         if ($request->has('short_description_' . $language->code)) {
@@ -57,5 +46,13 @@ class AdBoxTranslation extends Model
         }
 
         return $data;
+    }
+    public function adbox()
+    {
+        return $this->belongsTo(AdBox::class, 'ad_box_id');
+    }
+    public function language()
+    {
+        return $this->belongsTo(Language::class, 'language_id');
     }
 }
