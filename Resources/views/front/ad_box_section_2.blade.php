@@ -15,12 +15,12 @@
                 </div>
 
                 <div class="box-content">
-                    <a href="{{ $adBox->getUrl() }}">{{ $adBoxTranslation->type }}</a>
+                    <a href="{{ $adBox->getUrl() }}">{{ $adBox->type }}</a>
 
                     <h3>
-                        <a href="{{ $adBox->getUrl() }}">{{ $adBoxTranslation->title }}</a>
+                        <a href="{{ $adBox->getUrl() }}">{{ $adBox->title }}</a>
                     </h3>
-                    <p>{!! $adBox->getAnnonce() !!}</p>
+                    <p>{!! $adBox->getAnnounce() !!}</p>
                 </div>
             </div>
         @endforeach
@@ -48,8 +48,6 @@
     {{--        </div>--}}
     {{--    @endif--}}
 </section>
-
-
 
 <section class="section-kareta-2">
     <div class="infinite-text-loop">

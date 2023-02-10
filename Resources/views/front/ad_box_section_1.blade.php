@@ -88,7 +88,7 @@
                 <a href="" class="link-more">see more</a>
             </div>
 
-        
+
             <div class="box " data-aos="fade" data-aos-delay="40">
                 <div class="box-image parent-image-wrapper">
                     <img src="{{ $adBox->imageUrl() }}" alt="{{ $adBox->title }}" class="bg-image">
@@ -96,7 +96,7 @@
 
                 <div class="box-content">
                     <h3>{{ $adBox->title }}</h3>
-                    <p>{!! \Illuminate\Support\Str::limit($adBox->short_description, 255, ' ...') !!}</p>
+                    <p>{!! $adBox->getAnnounce() !!}</p>
                     <a href="{{ $adBox->getUrl() }}" class="btn btn-main">{{ trans('messages.see_more') }}</a>
                 </div>
 

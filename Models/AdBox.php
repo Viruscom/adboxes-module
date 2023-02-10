@@ -375,6 +375,10 @@ class AdBox extends Model implements TranslatableContract
     }
     public function getAnnounce(): string
     {
+        if (is_null($this->short_description)) {
+            return '';
+        }
+
         return Str::limit($this->short_description, 255, ' ...');
     }
 }

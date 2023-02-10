@@ -15,9 +15,9 @@
 
                 <div class="box-content">
                     <h3>
-                        <a href="{{ $adBox->getUrl() }}">{{ $adBoxTranslation->title }}</a>
+                        <a href="{{ $adBox->getUrl() }}">{{ $adBox->title }}</a>
                     </h3>
-                    <p>{!! $adBox->getAnnonce() !!}</p>
+                    <p>{!! $adBox->getAnnounce() !!}</p>
 
                     <a href="{{ $adBox->getUrl() }}" class="btn btn-main">{{ trans('messages.see_more') }}</a>
                 </div>
@@ -34,7 +34,6 @@
     {{--        </div>--}}
     {{--    @endif--}}
 </section>
-
 
 <section class="section section-latest-news">
     <h3 class="section-title">

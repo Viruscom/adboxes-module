@@ -17,7 +17,7 @@
                     <h3>
                         <a href="{{ $adBox->getUrl() }}">{{ $adBoxTranslation->title }}</a>
                     </h3>
-                    <p>{!! $adBox->getAnnonce() !!}</p>
+                    <p>{!! $adBox->getAnnounce() !!}</p>
 
                     <a href="{{ $adBox->getUrl() }}" class="btn btn-main">{{ trans('messages.see_more') }}</a>
                 </div>
