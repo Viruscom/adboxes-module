@@ -22,7 +22,7 @@ class AdBox extends Model implements TranslatableContract
     public const PREVIEW_AND_EDIT_PERMISSION = "ad_boxes_preview_and_edit";
     public const FILES_PATH                  = "ad_boxes";
 
-    public static string $IMAGES_PATH            = "images/adboxes";
+    //    public static string $IMAGES_PATH            = "images/adboxes";
     public static int    $WAITING_ACTION         = 0;
     public static int    $FIRST_TYPE             = 1;
     public static int    $SECOND_TYPE            = 2;
@@ -70,7 +70,7 @@ class AdBox extends Model implements TranslatableContract
         }
     }
 
-    public static function getFileRulesForView()
+    public static function getFileRulesForView(): array
     {
         return [
             self::$FIRST_TYPE  => FileDimensionHelper::getUserInfoMessage('AdBoxes', self::$FIRST_TYPE),
@@ -79,7 +79,7 @@ class AdBox extends Model implements TranslatableContract
             self::$FOURTH_TYPE => FileDimensionHelper::getUserInfoMessage('AdBoxes', self::$FOURTH_TYPE),
         ];
     }
-    public static function getFileRuleMessage($AdBoxType)
+    public static function getFileRuleMessage($AdBoxType): string
     {
         return FileDimensionHelper::getUserInfoMessage('AdBoxes', self::getFileDimensionKey($AdBoxType));
     }
@@ -188,14 +188,14 @@ class AdBox extends Model implements TranslatableContract
 
         return '';
     }
-    public function imageUrl()
-    {
-        if ($this->filename == '' || !file_exists(public_path(self::$IMAGES_PATH . '/' . $this->id . '/' . $this->filename))) {
-            return url($this->getSystemImage());
-        }
-
-        return url(self::$IMAGES_PATH . '/' . $this->id) . '/' . $this->filename;
-    }
+    //    public function imageUrl()
+    //    {
+    //        if ($this->filename == '' || !file_exists(public_path(self::$IMAGES_PATH . '/' . $this->id . '/' . $this->filename))) {
+    //            return url($this->getSystemImage());
+    //        }
+    //
+    //        return url(self::$IMAGES_PATH . '/' . $this->id) . '/' . $this->filename;
+    //    }
     public function updatedPosition($request, $adBox, $AdBoxType): int
     {
         if ($adBox->type == 0) {
