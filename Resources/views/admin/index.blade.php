@@ -30,5 +30,4 @@
     @include('adboxes::admin.partials.ad_boxes_types.second')
     @include('adboxes::admin.partials.ad_boxes_types.third')
     @include('adboxes::admin.partials.ad_boxes_types.fourth')
-    @include('admin.partials.modals.delete_confirm')
 @endsection

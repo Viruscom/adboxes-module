@@ -256,7 +256,7 @@ class AdBoxesController extends Controller
         return redirect()->route('admin.ad-boxes.index')->with('success-message', 'adboxes::admin.adboxes_actions.successful_edit_button');
     }
 
-    public function imgDelete($id): RedirectResponse
+    public function deleteImage($id): RedirectResponse
     {
         $adBox = AdBox::find($id);
         if (is_null($adBox)) {
