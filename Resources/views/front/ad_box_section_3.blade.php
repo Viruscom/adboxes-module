@@ -9,7 +9,7 @@
                 <div class="box-top">
                     <div class="box-image parent-image-wrapper">
                         <a href="{{ $adBox->getUrl() }}"></a>
-                        <img src="{{ $adBox->imageUrl() }}" alt="{{ $adBox->title }}" class="bg-image">
+                        <img src="{{ $adBox->getFileUrl() }}" alt="{{ $adBox->title }}" class="bg-image">
                     </div>
                 </div>
 
