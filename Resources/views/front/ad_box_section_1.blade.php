@@ -1,22 +1,3 @@
-<section class="section-products">
-    <div class="boxes-type-1">
-
-    </div>
-
-    <div class="section-actions" data-aos="fade-up" data-aos-delay="40">
-        <a href="{{ url('/') }}" class="btn btn-black">{{ trans('front.all_products') }}</a>
-    </div>
-
-    {{--    @php--}}
-    {{--        $adBoxButton = \App\Models\AdBoxButton::getTranslation(1, $language->id);--}}
-    {{--    @endphp--}}
-    {{--    @if($adBoxButton && $adBoxButton->url)--}}
-    {{--        <div class="section-actions">--}}
-    {{--            <a href="{{ (!is_null($adBoxButton)) ? ($adBoxButton->external_url) ? $adBoxButton->url : url($adBoxButton->url) :''}}" class="btn" data-aos="fade-up" data-aos-delay="100">{!! $adBoxButton->title !!}</a>--}}
-    {{--        </div>--}}
-    {{--    @endif--}}
-</section>
-
 <section class="section-kareta-1">
     <div class="infinite-text-loop">
         <div class="inner">
@@ -36,7 +17,7 @@
                     <a href=""></a>
 
                     <div class="box-image parent-image-wrapper">
-                        <img src="assets/images/kareta-1.jpg" alt="" class="bg-image">
+                        <img src="{{ $adBox->getUrl() }}" alt="" class="bg-image">
                     </div>
                 </div>
 
@@ -64,9 +45,9 @@
                                 </div>
 
                                 <a href="">
-                                    <img src="assets/icons/heart-alt.svg" alt="">
+                                    <img src="{{ asset('front/assets/icons/heart-alt.svg') }}" alt="">
 
-                                    <img src="assets/icons/heart-alt-hover.svg" alt="">
+                                    <img src="{{ asset('front/assets/icons/heart-alt-hover.svg') }}" alt="">
                                 </a>
                             </div>
 
@@ -111,3 +92,5 @@
         <a href="" class="link-more-big"></a>
     </div>
 </section>
+
+{{--    @php--}}{{--        $adBoxButton = \App\Models\AdBoxButton::getTranslation(1, $language->id);--}}{{--    @endphp--}}{{--    @if($adBoxButton && $adBoxButton->url)--}}{{--        <div class="section-actions">--}}{{--            <a href="{{ (!is_null($adBoxButton)) ? ($adBoxButton->external_url) ? $adBoxButton->url : url($adBoxButton->url) :''}}" class="btn" data-aos="fade-up" data-aos-delay="100">{!! $adBoxButton->title !!}</a>--}}{{--        </div>--}}{{--    @endif--}}
