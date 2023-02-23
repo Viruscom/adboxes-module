@@ -274,7 +274,7 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close text-purple" data-dismiss="modal">&times;</button>
-                                <h4 class="modal-title">Изберете позиция</h4>
+                                <h4 class="modal-title">{{ __('admin.choose_position') }}</h4>
                             </div>
                             <div class="modal-body">
                                 <table class="table table-striped table-hover table-positions">
@@ -301,8 +301,8 @@
                                 <div class="form-actions">
                                     <div class="row">
                                         <div class="col-md-offset-3 col-md-9">
-                                            <a href="#" class="btn save-btn margin-bottom-10 accept-position-change" data-dismiss="modal"><i class="fas fa-save"></i> потвърди</a>
-                                            <a role="button" class="btn back-btn margin-bottom-10 cancel-position-change" current-position="{{ old('position') }}" data-dismiss="modal"><i class="fa fa-reply"></i> назад</a>
+                                            <a href="#" class="btn save-btn margin-bottom-10 accept-position-change" data-dismiss="modal"><i class="fas fa-save"></i> {{ __('admin.common.apply') }}</a>
+                                            <a role="button" class="btn back-btn margin-bottom-10 cancel-position-change" current-position="{{ old('position') }}" data-dismiss="modal"><i class="fa fa-reply"></i> {{ __('admin.common.back') }}</a>
                                         </div>
                                     </div>
                                 </div>
