@@ -145,18 +145,9 @@
                             @include('admin.partials.on_edit.form_fields.link_input', ['model'=> $adBox, 'fieldName' => 'url_' . $language->code, 'label' => trans('admin.common.link'), 'required' => true])
                             @include('admin.partials.on_edit.internal_link_select', ['fieldName' => 'url_' . $language->code, 'model' => $adBox])
 
-                            <div class="form-group {{ (!is_null($adTrans) && $adTrans->external_url !== 0) ? 'hidden': '' }}">
-                                <label class="control-label">Вътрешен линк (<span class="text-uppercase">{{$language->code}}</span>) <span class="text-purple">Моля, изберете</span>:</label>
-                                <div>
-                                    <select name="{{'url_' . $language->code}}" class="form-control select2 select2-{{$language->code}}" style="width: 100%;" {{ (!is_null($adTrans) && $adTrans->external_url !== 0) ? 'disabled': '' }}>
-                                        @include('admin.partials.on_edit.select_tag_internal_links', ['language' => $language->code, 'internalLinks' => $internalLinks, 'model' => $adBox])
-                                    </select>
-                                </div>
-                            </div>
-
                             <div class="row">
                                 @include('admin.partials.on_edit.external_link_checkbox', ['fieldName' => 'external_url_' . $language->code, 'model' => $adBox])
-                                @include('admin.partials.on_edit.show_in_language_visibility_checkbox', ['fieldName' => 'visible_' . $language->code, 'model' => $adTrans])
+                                @include('admin.partials.on_edit.show_in_language_visibility_checkbox', ['fieldName' => 'visible_' . $language->code, 'model' => $adBox])
                             </div>
 
                         </div>
