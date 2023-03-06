@@ -4,6 +4,7 @@ namespace Modules\AdBoxes\Models;
 
 use App\Helpers\AdminHelper;
 use App\Helpers\FileDimensionHelper;
+use App\Traits\CommonActions;
 use App\Traits\Scopes;
 use App\Traits\StorageActions;
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
@@ -318,7 +319,7 @@ class AdBox extends Model implements TranslatableContract
         }
 
         if ($request->hasFile('image')) {
-            $data['filename'] = pathinfo($request->image->getClientOriginalName(), PATHINFO_FILENAME) . '.' . $request->image->getClientOriginalExtension();
+            $data['filename'] = pathinfo(CommonActions::getValidFilenameStatic($request->image->getClientOriginalName()), PATHINFO_FILENAME) . '.' . $request->image->getClientOriginalExtension();
         }
 
         return $data;
