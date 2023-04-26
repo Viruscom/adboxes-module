@@ -49,6 +49,7 @@ class AdBox extends Model implements TranslatableContract
 
     public    $translatedAttributes = ['title', 'label', 'short_description', 'visible', 'url', 'external_url'];
     protected $fillable             = ['type', 'page_id', 'product_id', 'active', 'position', 'created_by', 'updated_bg', 'filename', 'date', 'from_date', 'to_date', 'price', 'from_price', 'new_price', 'from_new_price', 'type_color_class'];
+
     public static function getTypes(): array
     {
         return [self::$FIRST_TYPE, self::$SECOND_TYPE, self::$THIRD_TYPE, self::$FOURTH_TYPE];
@@ -281,7 +282,6 @@ class AdBox extends Model implements TranslatableContract
         if ($request->has('type_color_class')) {
             $data['type_color_class'] = $request->type_color_class;
         }
-
         if ($request->has('filename')) {
             $data['filename'] = $request->filename;
         }
