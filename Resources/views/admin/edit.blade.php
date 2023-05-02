@@ -118,9 +118,6 @@
                             <?php
                             $adTrans        = $adBox->translate($language->code);
                             $langShortDescr = 'short_description_' . $language->code;
-                            if (is_null($adTrans)) {
-                                continue;
-                            }
                             ?>
 
                         <div id="{{$language->code}}" class="tab-pane fade in @if($language->code === config('default.app.language.code')) active @endif">
@@ -136,7 +133,7 @@
 
                             <div class="form-group @if($errors->has($langShortDescr)) has-error @endif">
                                 <label class="control-label p-b-10">{{ __('admin.description') }} (<span class="text-uppercase">{{$language->code}}</span>):</label>
-                                <textarea name="{{$langShortDescr}}" class="form-control" rows="3">{{ old($langShortDescr) ?: $adTrans->short_description }}</textarea>
+                                <textarea name="{{$langShortDescr}}" class="form-control" rows="3">{{ old($langShortDescr) ?: (!is_null($adTrans) ? $adTrans->short_description: '') }}</textarea>
                                 @if($errors->has($langShortDescr))
                                     <span class="help-block">{{ trans($errors->first($langShortDescr)) }}</span>
                                 @endif

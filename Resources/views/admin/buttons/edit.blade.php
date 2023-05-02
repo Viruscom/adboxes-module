@@ -88,7 +88,7 @@
                                 <label class="control-label">Вътрешен линк (<span class="text-uppercase">{{$language->code}}</span>):</label>
                                 <div>
                                     <select name="{{$langLink}}" class="form-control select2 select2-{{$language->code}}" style="width: 100%;" {{ (!is_null($adboxTranslation) && $adboxTranslation->external_url != 0) ? 'disabled': '' }}>
-                                        @include('admin.partials.on_edit.select_tag_internal_links', ['language' => $language->code, 'internalLinks' => $internalLinks, 'model' => $adBoxButton])
+                                        @include('admin.partials.on_edit.select_tag_internal_links', ['oldFieldName' => $langLink, 'language' => $language->code, 'internalLinks' => $internalLinks, 'model' => $adBoxButton])
                                     </select>
                                 </div>
                             </div>
