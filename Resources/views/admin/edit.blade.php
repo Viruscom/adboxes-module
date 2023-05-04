@@ -123,11 +123,11 @@
                         <div id="{{$language->code}}" class="tab-pane fade in @if($language->code === config('default.app.language.code')) active @endif">
                             <div class="row">
                                 <div class="col-md-6">
-                                    @include('admin.partials.on_edit.form_fields.input_text', ['model'=> $adBox, 'fieldName' => 'title_' . $language->code, 'label' => trans('admin.title'), 'required' => true])
+                                    @include('admin.partials.on_edit.form_fields.input_text', ['model'=> $adTrans, 'fieldName' => 'title_' . $language->code, 'label' => trans('admin.title'), 'required' => true])
                                 </div>
 
                                 <div class="col-md-6">
-                                    @include('admin.partials.on_edit.form_fields.input_text', ['model'=> $adBox, 'fieldName' => 'label_' . $language->code, 'label' => trans('admin.label'), 'required' => false])
+                                    @include('admin.partials.on_edit.form_fields.input_text', ['model'=> $adTrans, 'fieldName' => 'label_' . $language->code, 'label' => trans('admin.label'), 'required' => false])
                                 </div>
                             </div>
 
