@@ -229,6 +229,22 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-lg-6 col-xs-12">
+                            <div class="form-group @if($errors->has('date_from_to')) has-error @endif">
+                                <label class="control-label m-b-10">За период (от-до):</label>
+                                <div class="input-group m-b-10">
+                                    <div class="input-group-addon">От дата</div>
+                                    <input type="text" class="form-control" value="{{ old('from_date') ?: $adBox->from_date }}" name="from_date" id="dpd1" autocomplete="off">
+                                </div>
+                                <div class="input-group">
+                                    <div class="input-group-addon">До дата</div>
+                                    <input type="text" class="form-control" value="{{ old('to_date') ?: $adBox->to_date }}" name="to_date" id="dpd2" autocomplete="off">
+                                </div>
+                                @if($errors->has('date_from_to'))
+                                    <span class="help-block">{{ trans($errors->first('date_from_to')) }}</span>
+                                @endif
+                            </div>
+                        </div>
 
                         @if (!$adBox->isWaitingAction())
                             <div class="row">

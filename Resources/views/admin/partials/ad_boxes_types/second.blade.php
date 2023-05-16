@@ -77,6 +77,6 @@
 
 <div class="row">
     <div class="col-md-12">
-        <a href="{{ route('admin.ad-boxes.edit-button', ['adBoxType' => 2]) }}" class="btn btn-light-green">{!! (isset($adboxButtons[1]) && $adboxButtons[1]->title !='') ? $adboxButtons[1]->title : trans('adboxes::admin.default_button_name_2')  !!}</a>
+        <a href="{{ route('admin.ad-boxes.edit-button', ['adBoxType' => 2]) }}" class="btn btn-light-green">{!! (isset($adBoxButtons[1]) && $adBoxButtons[1]->title !='') ? $adBoxButtons[1]->title : trans('adboxes::admin.default_button_name_2')  !!}</a>
     </div>
 </div>

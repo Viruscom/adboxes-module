@@ -1,6 +1,11 @@
 <section class="section">
     <div class="boxes boxes-type-1">
         @foreach($viewArray['adBoxesFrontAll'][1] as $adBox)
+            @php
+                if (is_null($adBox->translate($languageSlug))) {
+                    continue;
+                }
+            @endphp
             <div class="box" data-aos="fade-up">
                 <div class="box-image-wrapper">
                     <div class="box-prices">
@@ -60,7 +65,7 @@
                             @endif
                         </div>
 
-                        <a href="{{ $adBox->getUrl() }}" class="link-more  {{ $adBox->getLabelColor() }}">...{{ __('front.see_more') }}</a>
+                        <a href="{{ $adBox->getUrl() }}" class="link-more {{ $adBox->getLabelColor() }}">...{{ __('front.see_more') }}</a>
                     </div>
                 </div>
             </div>
