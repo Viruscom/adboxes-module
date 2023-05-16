@@ -10,9 +10,9 @@ class AdBoxButton extends Model
     protected $table    = "ad_box_button_translation";
     protected $fillable = ['locale', 'ad_box_type', 'title', 'url', 'external_url', 'visible'];
 
-    public static function getTranslation($adboxType, $languageCode)
+    public static function getTranslation($adBoxType, $languageCode)
     {
-        return self::where('locale', $languageCode)->where('ad_box_type', $adboxType)->where('visible', true)->first();
+        return self::where('locale', $languageCode)->where('ad_box_type', $adBoxType)->where('visible', true)->first();
     }
 
     public static function getCreateData($language, $request): array
@@ -62,5 +62,14 @@ class AdBoxButton extends Model
     public function getUpdateData($language, $request): array
     {
         return self::getData($language, $request, []);
+    }
+
+    public function getUrl($languageSlug)
+    {
+        if ($this->external_url) {
+            return $this->url;
+        }
+
+        return url($languageSlug . '/' . $this->url);
     }
 }

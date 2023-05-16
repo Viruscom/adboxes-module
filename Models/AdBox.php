@@ -46,6 +46,10 @@ class AdBox extends Model implements TranslatableContract
     public static string $AD_BOX_3_MAX_FILE_SIZE = "3000";
     public static string $AD_BOX_4_MAX_FILE_SIZE = "3000";
 
+    public const CURRENCY_DECIMALS            = 2;
+    public const CURRENCY_SEPARATOR           = ',';
+    public const CURRENCY_THOUSANDS_SEPARATOR = '';
+
 
     public    $translatedAttributes = ['title', 'label', 'short_description', 'visible', 'url', 'external_url'];
     protected $fillable             = ['type', 'page_id', 'product_id', 'active', 'position', 'created_by', 'updated_bg', 'filename', 'date', 'from_date', 'to_date', 'price', 'from_price', 'new_price', 'from_new_price', 'type_color_class'];
@@ -385,5 +389,45 @@ class AdBox extends Model implements TranslatableContract
         }
 
         return Str::limit($this->short_description, 255, ' ...');
+    }
+    public function getFromDate($format): string
+    {
+        if (is_null($this->from_date)) {
+            return '';
+        }
+
+        return Carbon::parse($this->from_date)->format($format);
+    }
+
+    public function getToDate($format): string
+    {
+        if (is_null($this->to_date)) {
+            return '';
+        }
+
+        return Carbon::parse($this->to_date)->format($format);
+    }
+
+    public function getPrice(): string
+    {
+        if (is_null($this->price)) {
+            return '';
+        }
+
+        return number_format($this->price, self::CURRENCY_DECIMALS, self::CURRENCY_SEPARATOR, self::CURRENCY_THOUSANDS_SEPARATOR);
+    }
+
+    public function getNewPrice(): string
+    {
+        if (is_null($this->new_price)) {
+            return '';
+        }
+
+        return number_format($this->new_price, self::CURRENCY_DECIMALS, self::CURRENCY_SEPARATOR, self::CURRENCY_THOUSANDS_SEPARATOR);
+    }
+
+    public function getLabelColor()
+    {
+        return $this->type_color_class;
     }
 }

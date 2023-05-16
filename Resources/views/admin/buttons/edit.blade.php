@@ -67,7 +67,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group @if($errors->has($langTitle)) has-error @endif">
-                                        <label class="control-label p-b-10"><span class="text-purple">* </span>Заглавие (<span class="text-uppercase">{{$language->code}}</span>):</label>
+                                        <label class="control-label p-b-10"><span class="text-purple">* </span>{{ __('admin.title') }} (<span class="text-uppercase">{{$language->code}}</span>):</label>
                                         <input class="form-control" type="text" name="{{$langTitle}}" value="{{ old($langTitle) ?: (!is_null($adboxTranslation) ? $adboxTranslation->title : '') }}" required>
                                         @if($errors->has($langTitle))
                                             <span class="help-block">{{ trans($errors->first($langTitle)) }}</span>
@@ -76,22 +76,10 @@
                                 </div>
                             </div>
 
-                            <div class="form-group @if($errors->has($langLink)) has-error @endif {{ (!is_null($adboxTranslation) && $adboxTranslation->external_url === 0) ? 'hidden': '' }}">
-                                <label class="control-label p-b-10"><span class="text-purple">* </span> Линк (<span class="text-uppercase">{{$language->code}}</span>):</label>
-                                <input class="form-control" type="text" name="{{$langLink}}" value="{{ old($langLink) ?: $adboxTranslation->url }}">
-                                @if($errors->has($langLink))
-                                    <span class="help-block">{{ trans($errors->first($langLink)) }}</span>
-                                @endif
-                            </div>
+                            @include('admin.partials.on_edit.form_fields.link_input', ['model'=> $adBoxButton, 'fieldName' => 'url_' . $language->code, 'label' => trans('admin.common.link'), 'required' => true])
+                            @include('admin.partials.on_edit.internal_link_select', ['fieldName' => 'url_' . $language->code, 'model' => $adBoxButton])
 
-                            <div class="form-group {{ (!is_null($adboxTranslation) && $adboxTranslation->external_url === 1) ? 'hidden': '' }}">
-                                <label class="control-label">Вътрешен линк (<span class="text-uppercase">{{$language->code}}</span>):</label>
-                                <div>
-                                    <select name="{{$langLink}}" class="form-control select2 select2-{{$language->code}}" style="width: 100%;" {{ (!is_null($adboxTranslation) && $adboxTranslation->external_url != 0) ? 'disabled': '' }}>
-                                        @include('admin.partials.on_edit.select_tag_internal_links', ['oldFieldName' => $langLink, 'language' => $language->code, 'internalLinks' => $internalLinks, 'model' => $adBoxButton])
-                                    </select>
-                                </div>
-                            </div>
+
 
                             <div class="row">
                                 <div class="col-lg-6 col-xs-12">
