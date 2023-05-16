@@ -110,8 +110,6 @@
                 <div class="tab-content">
                     @foreach($languages as $language)
                             <?php
-                            $langTitle       = 'title_' . $language->code;
-                            $langType        = 'type_' . $language->code;
                             $langShortDescr  = 'short_description_' . $language->code;
                             $langVisible     = 'visible_' . $language->code;
                             $langLink        = 'url_' . $language->code;
@@ -120,23 +118,11 @@
                         <div id="{{$language->code}}" class="tab-pane fade in @if($language->code === config('default.app.language.code')) active @endif">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <div class="form-group @if($errors->has($langTitle)) has-error @endif">
-                                        <label class="control-label p-b-10"><span class="text-purple">* </span>@lang('adboxes::admin.title') (<span class="text-uppercase">{{$language->code}}</span>):</label>
-                                        <input class="form-control" type="text" name="{{$langTitle}}" value="{{ old($langTitle) }}" required>
-                                        @if($errors->has($langTitle))
-                                            <span class="help-block">{{ trans($errors->first($langTitle)) }}</span>
-                                        @endif
-                                    </div>
+                                    @include('admin.partials.on_create.form_fields.input_text', ['fieldName' => 'title_' . $language->code, 'label' => trans('admin.title'), 'required' => true])
                                 </div>
 
                                 <div class="col-md-6">
-                                    <div class="form-group @if($errors->has($langType)) has-error @endif">
-                                        <label class="control-label p-b-10">@lang('adboxes::admin.label') (<span class="text-uppercase">{{$language->code}}</span>):</label>
-                                        <input class="form-control" type="text" name="{{$langType}}" value="{{ old($langType) }}" placeholder="@lang('adboxes::admin.label_placeholder')">
-                                        @if($errors->has($langType))
-                                            <span class="help-block">{{ trans($errors->first($langType)) }}</span>
-                                        @endif
-                                    </div>
+                                    @include('admin.partials.on_create.form_fields.input_text', ['fieldName' => 'label_' . $language->code, 'label' => trans('admin.label'), 'required' => false])
                                 </div>
                             </div>
 

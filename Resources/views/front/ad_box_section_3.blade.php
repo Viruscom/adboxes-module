@@ -1,137 +1,86 @@
-<section class="section section-videos section-lines">
-    <div class="titles-wrapper">
-        <div class="title-row" data-aos="fade-up" data-aos-delay="40"><h3 class="section-title-alt">{!! trans('messages.video_accents') !!}</h3></div>
+<section class="section section-services">
+    <div class="section-head">
+        <div class="label" data-aos="fade-up" data-aos-delay="50"></div>
+
+        <h3 data-aos="fade-up" data-aos-delay="100">{{ __('front.good_service') }}<span class="color-red">,</span></h3>
+
+        <h4 data-aos="fade-up" data-aos-delay="150">{{ __('front.for') }} <span class="color-red">{{ __('front.good') }}</span> {{ __('front.taste') }}</h4>
+
+        <img src="{{ asset('front/assets/icons/heart-1.svg') }}" alt="" data-aos="fade-up" data-aos-delay="200">
     </div>
 
-    <div class="boxes-type-video">
+    <div class="boxes boxes-type-3">
         @foreach($viewArray['adBoxesFrontAll'][3] as $adBox)
-            <div class="box" data-aos="fade" data-aos-delay="40">
-                <div class="box-top">
-                    <div class="box-image parent-image-wrapper">
-                        <a href="{{ $adBox->getUrl() }}"></a>
-                        <img src="{{ $adBox->getFileUrl() }}" alt="{{ $adBox->title }}" class="bg-image">
+            @php
+                if (is_null($adBox->translate($languageSlug))) {
+                    continue;
+                }
+            @endphp
+            <div class="box" data-aos="fade-up">
+                <div class="box-image-wrapper">
+                    <div class="box-prices">
+                        <div class="inner">
+                            @if($adBox->getPrice() != '')
+                                <p class="old-price">
+                                    @if($adBox->from_price)
+                                        <span>{{ __('front.from') }}</span>
+                                    @endif
+
+                                    <strong>{{ $adBox->getPrice() }}
+                                        <span>{{ __('front.currency') }}</span>
+                                    </strong>
+                                </p>
+                            @endif
+
+                            @if($adBox->getNewPrice() != '')
+                                <p>
+                                    @if($adBox->from_new_price)
+                                        <span>{{ __('front.from') }}</span>
+                                    @endif
+
+                                    <strong>{{ $adBox->getNewPrice() }}
+                                        <span>{{ __('front.currency') }}</span>
+                                    </strong>
+                                </p>
+                            @endif
+                        </div>
+                    </div>
+
+                    <a href="{{ $adBox->getUrl($languageSlug) }}"></a>
+
+                    <div class="box-image-inner">
+                        <div class="box-image parent-image-wrapper">
+                            <img src="{{ $adBox->getFileUrl() }}" alt="{{ $adBox->title }}" class="bg-image">
+                        </div>
                     </div>
                 </div>
 
                 <div class="box-content">
+                    <div class="box-label {{ $adBox->getLabelColor() }}">{{ $adBox->label }}</div>
+
                     <h3>
-                        <a href="{{ $adBox->getUrl() }}">{{ $adBox->title }}</a>
+                        <a href="{{ $adBox->getUrl($languageSlug) }}">{{ $adBox->title }}</a>
                     </h3>
+
                     <p>{!! $adBox->getAnnounce() !!}</p>
 
-                    <a href="{{ $adBox->getUrl() }}" class="btn btn-main">{{ trans('messages.see_more') }}</a>
+                    <div class="box-actions">
+                        <div class="box-date">
+                            @if($adBox->getFromDate('d.m.') !== '')
+                                <span>{{$adBox->getFromDate('d.m.')}}</span>
+                            @endif
+
+                            @if($adBox->getToDate('d.m.') !== '')
+                                <span>{{$adBox->getToDate('d.m.')}}</span>
+                            @endif
+                        </div>
+
+                        <a href="{{ $adBox->getUrl($languageSlug) }}" class="link-more {{ $adBox->getLabelColor() }}">...{{ __('front.see_more') }}</a>
+                    </div>
                 </div>
             </div>
         @endforeach
     </div>
 
-    {{--    @php--}}
-    {{--        $adBoxButton = \App\Models\AdBoxButton::getTranslation(3, $language->id);--}}
-    {{--    @endphp--}}
-    {{--    @if($adBoxButton && $adBoxButton->url)--}}
-    {{--        <div class="section-actions">--}}
-    {{--            <a href="{{ (!is_null($adBoxButton)) ? ($adBoxButton->external_url) ? $adBoxButton->url : url($adBoxButton->url) :''}}" class="btn" data-aos="fade-up" data-aos-delay="100">{!! $adBoxButton->title !!}</a>--}}
-    {{--        </div>--}}
-    {{--    @endif--}}
-</section>
-
-<section class="section section-latest-news">
-    <h3 class="section-title">
-        <strong data-aos="fade-up" data-aos-delay="50">Last events &amp;</strong>
-
-        <i data-aos="fade-up" data-aos-delay="200">news</i>
-    </h3>
-
-    <ul class="slider-news kareta3">
-        <li class="slide box" data-aos="fade-up">
-            <div class="box-image-wrapper" data-aos="fade-up" data-aos-delay="150">
-                <h3><a href="">About us</a></h3>
-
-                <div class="box-image parent-image-wrapper">
-                    <img src="assets/images/kareta3-1.jpg" alt="" class="bg-image">
-
-                </div>
-            </div>
-
-            <div class="box-content" data-aos="fade-up" data-aos-delay="200">
-                <div class="box-inner">
-                    <p class="date">24.03.2020</p>
-
-                    <h3><a href="">Lorem ipsum dolor sit amet Nectetur</a></h3>
-
-                    <p>Dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore etsd dhha dolore magna aliqua atenim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip</p>
-
-                    <a href="" class="link-more">see more</a>
-
-                </div>
-            </div>
-        </li>
-
-        <li class="slide box" data-aos="fade-up">
-            <div class="box-image-wrapper" data-aos="fade-up" data-aos-delay="150">
-                <h3><a href="">our blog</a></h3>
-
-                <div class="box-image parent-image-wrapper">
-                    <img src="assets/images/kareta3-1.jpg" alt="" class="bg-image">
-                </div>
-            </div>
-
-            <div class="box-content" data-aos="fade-up" data-aos-delay="200">
-                <div class="box-inner">
-                    <p class="date">08.03.2020</p>
-
-                    <h3><a href="">sit amet Nectetur</a></h3>
-
-                    <p>Dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore etsd dhha dolore magna aliqua atenim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip</p>
-
-                    <a href="" class="link-more">see more</a>
-
-                </div>
-            </div>
-        </li>
-
-        <li class="slide box" data-aos="fade-up">
-            <div class="box-image-wrapper" data-aos="fade-up" data-aos-delay="150">
-                <h3><a href="">About us</a></h3>
-
-                <div class="box-image parent-image-wrapper">
-                    <img src="assets/images/kareta3-2.jpg" alt="" class="bg-image">
-                </div>
-            </div>
-
-            <div class="box-content" data-aos="fade-up" data-aos-delay="200">
-                <div class="box-inner">
-                    <h3><a href="">dolor sit amet Nectetur adipisicig elit sed do eiusm</a></h3>
-
-                    <p>Dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore etsd dhha dolore magna aliqua atenim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip</p>
-
-                    <a href="" class="link-more">see more</a>
-
-                </div>
-            </div>
-        </li>
-
-        <li class="slide box" data-aos="fade-up">
-            <div class="box-image-wrapper" data-aos="fade-up" data-aos-delay="150">
-                <h3><a href="">About us</a></h3>
-
-                <div class="box-image parent-image-wrapper">
-                    <img src="assets/images/kareta3-1.jpg" alt="" class="bg-image">
-                </div>
-            </div>
-
-            <div class="box-content" data-aos="fade-up" data-aos-delay="200">
-                <div class="box-inner">
-                    <p class="date">24.03.2020</p>
-
-                    <h3><a href="">Lorem ipsum dolor sit amet Nectetur</a></h3>
-
-                    <p>Dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore etsd dhha dolore magna aliqua atenim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip</p>
-
-                    <a href="" class="link-more">see more</a>
-
-                </div>
-            </div>
-        </li>
-    </ul>
+    <img src="{{ asset('front/assets/icons/double-heart.svg') }}" alt="" data-aos="fade-up" data-aos-delay="50">
 </section>

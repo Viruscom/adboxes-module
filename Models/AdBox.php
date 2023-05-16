@@ -182,14 +182,14 @@ class AdBox extends Model implements TranslatableContract
     {
         return AdminHelper::getSystemImage(self::${'AD_BOX_' . $this->type . '_SYSTEM_IMAGE'});
     }
-    public function getUrl()
+    public function getUrl($languageSlug)
     {
         if (!is_null($this->url)) {
             if ($this->external_url) {
                 return $this->url;
             }
 
-            return url($this->url);
+            return url($languageSlug . '/' .$this->url);
         }
 
         return '';

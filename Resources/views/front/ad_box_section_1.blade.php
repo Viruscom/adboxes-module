@@ -36,7 +36,7 @@
                         </div>
                     </div>
 
-                    <a href=""></a>
+                    <a href="{{ $adBox->getUrl($languageSlug) }}"></a>
 
                     <div class="box-image-inner">
                         <div class="box-image parent-image-wrapper">
@@ -49,7 +49,7 @@
                     <div class="box-label {{ $adBox->getLabelColor() }}">{{ $adBox->label }}</div>
 
                     <h3>
-                        <a href="{{ $adBox->getUrl() }}">{{ $adBox->title }}</a>
+                        <a href="{{ $adBox->getUrl($languageSlug) }}">{{ $adBox->title }}</a>
                     </h3>
 
                     <p>{!! $adBox->getAnnounce() !!}</p>
@@ -65,7 +65,7 @@
                             @endif
                         </div>
 
-                        <a href="{{ $adBox->getUrl() }}" class="link-more {{ $adBox->getLabelColor() }}">...{{ __('front.see_more') }}</a>
+                        <a href="{{ $adBox->getUrl($languageSlug) }}" class="link-more {{ $adBox->getLabelColor() }}">...{{ __('front.see_more') }}</a>
                     </div>
                 </div>
             </div>
