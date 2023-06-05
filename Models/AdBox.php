@@ -37,13 +37,8 @@ class AdBox extends Model implements TranslatableContract
     public static string $AD_BOX_2_MIMES         = "jpg,jpeg,png,gif";
     public static string $AD_BOX_3_MIMES         = "jpg,jpeg,png,gif";
     public static string $AD_BOX_4_MIMES         = "jpg,jpeg,png,gif";
-<<<<<<< HEAD
     public static string $AD_BOX_1_RATIO         = "3/2";
     public static string $AD_BOX_2_RATIO         = "3/2";
-=======
-    public static string $AD_BOX_1_RATIO         = "1/1";
-    public static string $AD_BOX_2_RATIO         = "1/1";
->>>>>>> aada4c8c633d50884e0d29616b44d429b75f1683
     public static string $AD_BOX_3_RATIO         = "1/1";
     public static string $AD_BOX_4_RATIO         = "1/1";
     public static string $AD_BOX_1_MAX_FILE_SIZE = "3000";
@@ -122,11 +117,7 @@ class AdBox extends Model implements TranslatableContract
         cache()->forget('adBoxesFrontAll');
         cache()->remember('adBoxesAdminAll', config('default.app.cache.ttl_seconds'), function () {
             $adBoxes                  = [];
-<<<<<<< HEAD
             $adBoxes['waitingAction'] = AdBox::waitingAction()->orderByPosition('asc')->with('translations')->get();
-=======
-            $adBoxes['waitingAction'] = AdBox::waitingAction()->orderByPosition('asc')->withTranslation()->get();
->>>>>>> aada4c8c633d50884e0d29616b44d429b75f1683
 
             return self::setAdBoxesTypes($adBoxes);
         });
@@ -139,17 +130,10 @@ class AdBox extends Model implements TranslatableContract
     }
     private static function setAdBoxesTypes($array)
     {
-<<<<<<< HEAD
         $array[self::$FIRST_TYPE]  = self::firstType()->orderByPosition('asc')->with('translations')->get();
         $array[self::$SECOND_TYPE] = self::secondType()->orderByPosition('asc')->with('translations')->get();
         $array[self::$THIRD_TYPE]  = self::thirdType()->orderByPosition('asc')->with('translations')->get();
         $array[self::$FOURTH_TYPE] = self::fourthType()->orderByPosition('asc')->with('translations')->get();
-=======
-        $array[self::$FIRST_TYPE]  = self::firstType()->orderByPosition('asc')->withTranslation()->with('translations')->get();
-        $array[self::$SECOND_TYPE] = self::secondType()->orderByPosition('asc')->withTranslation()->with('translations')->get();
-        $array[self::$THIRD_TYPE]  = self::thirdType()->orderByPosition('asc')->withTranslation()->with('translations')->get();
-        $array[self::$FOURTH_TYPE] = self::fourthType()->orderByPosition('asc')->withTranslation()->with('translations')->get();
->>>>>>> aada4c8c633d50884e0d29616b44d429b75f1683
 
         return $array;
     }
