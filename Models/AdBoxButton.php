@@ -51,11 +51,11 @@ class AdBoxButton extends Model
         cache()->forget('adBoxButtonsAll');
         cache()->forget('adBoxButtonsFrontAll');
 
-        cache()->remember('adBoxButtonsAll', config('default.app.cache.ttl_seconds'), function () {
+        cache()->rememberForever('adBoxButtonsAll', function () {
             return AdBoxButton::where('locale', config('default.app.admin_language.code'))->get();
         });
 
-        cache()->remember('adBoxButtonsFrontAll', config('default.app.cache.ttl_seconds'), function () {
+        cache()->rememberForever('adBoxButtonsFrontAll', function () {
             return self::where('visible', true)->get();
         });
     }

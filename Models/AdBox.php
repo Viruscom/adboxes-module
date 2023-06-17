@@ -24,6 +24,9 @@ class AdBox extends Model implements TranslatableContract
     public const FILES_PATH                  = "ad_boxes";
 
     //    public static string $IMAGES_PATH            = "images/adboxes";
+    public const CURRENCY_DECIMALS            = 2;
+    public const CURRENCY_SEPARATOR           = ',';
+    public const CURRENCY_THOUSANDS_SEPARATOR = '';
     public static int    $WAITING_ACTION         = 0;
     public static int    $FIRST_TYPE             = 1;
     public static int    $SECOND_TYPE            = 2;
@@ -45,12 +48,6 @@ class AdBox extends Model implements TranslatableContract
     public static string $AD_BOX_2_MAX_FILE_SIZE = "3000";
     public static string $AD_BOX_3_MAX_FILE_SIZE = "3000";
     public static string $AD_BOX_4_MAX_FILE_SIZE = "3000";
-
-    public const CURRENCY_DECIMALS            = 2;
-    public const CURRENCY_SEPARATOR           = ',';
-    public const CURRENCY_THOUSANDS_SEPARATOR = '';
-
-
     public    $translatedAttributes = ['title', 'label', 'short_description', 'visible', 'url', 'external_url'];
     protected $fillable             = ['type', 'page_id', 'product_id', 'active', 'position', 'created_by', 'updated_bg', 'filename', 'date', 'from_date', 'to_date', 'price', 'from_price', 'new_price', 'from_new_price', 'type_color_class'];
 
@@ -115,14 +112,14 @@ class AdBox extends Model implements TranslatableContract
     {
         cache()->forget('adBoxesAdminAll');
         cache()->forget('adBoxesFrontAll');
-        cache()->remember('adBoxesAdminAll', config('default.app.cache.ttl_seconds'), function () {
+        cache()->rememberForever('adBoxesAdminAll', function () {
             $adBoxes                  = [];
             $adBoxes['waitingAction'] = AdBox::waitingAction()->orderByPosition('asc')->with('translations')->get();
 
             return self::setAdBoxesTypes($adBoxes);
         });
 
-        cache()->remember('adBoxesFrontAll', config('default.app.cache.ttl_seconds'), function () {
+        cache()->rememberForever('adBoxesFrontAll', function () {
             $adBoxes = [];
 
             return self::setAdBoxesTypes($adBoxes);
@@ -189,7 +186,7 @@ class AdBox extends Model implements TranslatableContract
                 return $this->url;
             }
 
-            return url($languageSlug . '/' .$this->url);
+            return url($languageSlug . '/' . $this->url);
         }
 
         return '';
