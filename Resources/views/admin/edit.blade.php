@@ -268,17 +268,14 @@
                                             @endif
                                             <div>
                                                 @if ($adBox->existsFile($adBox->filename))
-                                                    <div class="overlay-delete-img hidden">
-                                                        <a href="{{ route('admin.ad-boxes.delete-image', ['id'=>$adBox->id]) }}" class="del-link del-link-ajax"><i class="fas fa-times"></i>
-                                                            <p>Изтрий</p></a>
-                                                    </div>
-                                                    <img class="thumbnail content-box1 has-img img-responsive" src="{{ $adBox->getFileUrl() }}" width="300"/>
+                                                    <img class="thumbnail img-responsive" src="{{ $adBox->getFileUrl() }}" width="300" alt="{{ __('admin.image') }}"/>
+                                                    @if ($adBox->existsFile($adBox->filename))
+                                                        <a href="{{ route('admin.ad-boxes.delete-image', ['id'=>$adBox->id]) }}" class="btn red"><i class="fas fa-trash-alt"></i> {{ __('admin.delete_image') }}</a>
+                                                    @endif
                                                 @else
                                                     <img class="thumbnail img-responsive" src="{{ $adBox->getFileUrl() }}" width="300"/>
                                                 @endif
                                                 <div class="default-img-path hidden">{{ $adBox->getFileUrl() }}</div>
-
-                                                <div class="alert alert-success removed-img-ajax hidden" style="width: 300px;">Успешно изтриване!</div>
                                             </div>
                                         </div>
                                     </div>
