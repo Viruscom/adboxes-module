@@ -1,3 +1,4 @@
+@php use Modules\Adboxes\Models\AdBoxButton; @endphp
 <section class="section">
     <div class="boxes boxes-type-1">
         @foreach($viewArray['adBoxesFrontAll'][1] as $adBox)
@@ -8,33 +9,35 @@
             @endphp
             <div class="box" data-aos="fade-up">
                 <div class="box-image-wrapper">
-                    <div class="box-prices">
-                        <div class="inner">
-                            @if($adBox->getPrice() != '')
-                                <p class="old-price">
-                                    @if($adBox->from_price)
-                                        <span>{{ __('front.from') }}</span>
-                                    @endif
+                    @if($adBox->getPrice() != '' || $adBox->getNewPrice() != '')
+                        <div class="box-prices">
+                            <div class="inner">
+                                @if($adBox->getPrice() != '')
+                                    <p class="old-price">
+                                        @if($adBox->from_price)
+                                            <span>{{ __('front.from') }}</span>
+                                        @endif
 
-                                    <strong>{{ $adBox->getPrice() }}
-                                        <span>{{ __('front.currency') }}</span>
-                                    </strong>
-                                </p>
-                            @endif
+                                        <strong>{{ $adBox->getPrice() }}
+                                            <span>{{ __('front.currency') }}</span>
+                                        </strong>
+                                    </p>
+                                @endif
 
-                            @if($adBox->getNewPrice() != '')
-                                <p>
-                                    @if($adBox->from_new_price)
-                                        <span>{{ __('front.from') }}</span>
-                                    @endif
+                                @if($adBox->getNewPrice() != '')
+                                    <p>
+                                        @if($adBox->from_new_price)
+                                            <span>{{ __('front.from') }}</span>
+                                        @endif
 
-                                    <strong>{{ $adBox->getNewPrice() }}
-                                        <span>{{ __('front.currency') }}</span>
-                                    </strong>
-                                </p>
-                            @endif
+                                        <strong>{{ $adBox->getNewPrice() }}
+                                            <span>{{ __('front.currency') }}</span>
+                                        </strong>
+                                    </p>
+                                @endif
+                            </div>
                         </div>
-                    </div>
+                    @endif
 
                     <a href="{{ $adBox->getUrl($languageSlug) }}"></a>
 
@@ -73,7 +76,7 @@
     </div>
 
     @php
-        $adBoxButton = \Modules\Adboxes\Models\AdBoxButton::getTranslation(1, $languageSlug);
+        $adBoxButton = AdBoxButton::getTranslation(1, $languageSlug);
     @endphp
     @if(!is_null($adBoxButton) && $adBoxButton->url)
         <div class="section-actions" data-aos="fade-up" data-aos-delay="50">

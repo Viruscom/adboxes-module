@@ -10,7 +10,6 @@
     </div>
 </section>
 
-
 <div class="boxes boxes-type-4 slider-element">
     @foreach($viewArray['adBoxesFrontAll'][4] as $adBox)
         @php
@@ -29,33 +28,35 @@
                 @endif
             </div>
             <div class="box-image-wrapper">
-                <div class="box-prices">
-                    <div class="inner">
-                        @if($adBox->getPrice() != '')
-                            <p class="old-price">
-                                @if($adBox->from_price)
-                                    <span>{{ __('front.from') }}</span>
-                                @endif
+                @if($adBox->getPrice() != '' || $adBox->getNewPrice() != '')
+                    <div class="box-prices">
+                        <div class="inner">
+                            @if($adBox->getPrice() != '')
+                                <p class="old-price">
+                                    @if($adBox->from_price)
+                                        <span>{{ __('front.from') }}</span>
+                                    @endif
 
-                                <strong>{{ $adBox->getPrice() }}
-                                    <span>{{ __('front.currency') }}</span>
-                                </strong>
-                            </p>
-                        @endif
+                                    <strong>{{ $adBox->getPrice() }}
+                                        <span>{{ __('front.currency') }}</span>
+                                    </strong>
+                                </p>
+                            @endif
 
-                        @if($adBox->getNewPrice() != '')
-                            <p>
-                                @if($adBox->from_new_price)
-                                    <span>{{ __('front.from') }}</span>
-                                @endif
+                            @if($adBox->getNewPrice() != '')
+                                <p>
+                                    @if($adBox->from_new_price)
+                                        <span>{{ __('front.from') }}</span>
+                                    @endif
 
-                                <strong>{{ $adBox->getNewPrice() }}
-                                    <span>{{ __('front.currency') }}</span>
-                                </strong>
-                            </p>
-                        @endif
+                                    <strong>{{ $adBox->getNewPrice() }}
+                                        <span>{{ __('front.currency') }}</span>
+                                    </strong>
+                                </p>
+                            @endif
+                        </div>
                     </div>
-                </div>
+                @endif
 
                 <div class="box-image-inner">
                     <a href="{{ $adBox->getUrl($languageSlug) }}"></a>
