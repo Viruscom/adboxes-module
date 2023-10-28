@@ -105,6 +105,10 @@
             $adBox = AdBox::find($id);
             MainHelper::goBackIfNull($adBox);
 
+            if ($adBox->type == AdBox::$WAITING_ACTION) {
+                $request['position'] = AdBox::generatePositionForWaitingAdBox($request->type);
+            }
+            
             $data      = AdBox::getRequestData($request);
             $languages = LanguageHelper::getActiveLanguages();
 
