@@ -105,12 +105,12 @@
             $adBox = AdBox::find($id);
             MainHelper::goBackIfNull($adBox);
 
-            if ($adBox->type == AdBox::$WAITING_ACTION) {
-                $request['position'] = AdBox::generatePositionForWaitingAdBox($request->type);
-            }
-            
-            $data      = AdBox::getRequestData($request);
+            $data      = AdBox::getRequestData($request, $adBox);
             $languages = LanguageHelper::getActiveLanguages();
+
+            if ($adBox->type == AdBox::$WAITING_ACTION) {
+                $data['position'] = AdBox::generatePositionForWaitingAdBox($request->type);
+            }
 
             foreach ($languages as $language) {
                 $data[$language->code] = AdBoxTranslation::getLanguageArray($language, $request);

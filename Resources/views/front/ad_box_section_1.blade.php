@@ -1,4 +1,34 @@
 @php use Modules\Adboxes\Models\AdBoxButton; @endphp
+<section class="section section-messages">
+    <div class="section-aside">
+        <div class="section-head">
+            <h3 class="section-title-alt">календар всичко от рек.карета 1</h3>
+        </div>
+
+        <div id="datepicker"></div>
+    </div>
+
+    <div class="section-content-messages">
+        <div class="section-head">
+            <h3 class="section-title-alt">съобщения</h3>
+
+            <div class="slider-custom-nav" data-slider-id="slider-message">
+                <a href="" class="slider-nav-el nav-prev"></a>
+
+                <div class="counter">
+                    <span></span>
+                    /
+                    <span></span>
+                </div>
+
+                <a href="" class="slider-nav-el nav-next"></a>
+            </div>
+        </div>
+
+        <?php include('website_parts/kareta-3-home.php') ?>
+    </div>
+</section>
+
 <section class="section">
     <div class="boxes boxes-type-1">
         @foreach($viewArray['adBoxesFrontAll'][1] as $adBox)

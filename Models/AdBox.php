@@ -86,6 +86,16 @@
         {
             return FileDimensionHelper::getUserInfoMessage('AdBoxes', self::getFileDimensionKey($AdBoxType));
         }
+        public static function generatePositionForWaitingAdBox($adBoxType): int
+        {
+            $adBoxes = self::where('type', $adBoxType)->orderBy('position', 'asc')->get();
+            dd($adBoxes);
+            if (count($adBoxes) < 1) {
+                return 1;
+            }
+
+            return $adBoxes->last()->position + 1;
+        }
         protected static function boot(): void
         {
             parent::boot();
@@ -179,6 +189,14 @@
         {
             return AdminHelper::getSystemImage(self::${'AD_BOX_' . $this->type . '_SYSTEM_IMAGE'});
         }
+        //    public function imageUrl()
+        //    {
+        //        if ($this->filename == '' || !file_exists(public_path(self::$IMAGES_PATH . '/' . $this->id . '/' . $this->filename))) {
+        //            return url($this->getSystemImage());
+        //        }
+        //
+        //        return url(self::$IMAGES_PATH . '/' . $this->id) . '/' . $this->filename;
+        //    }
         public function getUrl($languageSlug)
         {
             if (!is_null($this->url)) {
@@ -191,14 +209,6 @@
 
             return '';
         }
-        //    public function imageUrl()
-        //    {
-        //        if ($this->filename == '' || !file_exists(public_path(self::$IMAGES_PATH . '/' . $this->id . '/' . $this->filename))) {
-        //            return url($this->getSystemImage());
-        //        }
-        //
-        //        return url(self::$IMAGES_PATH . '/' . $this->id) . '/' . $this->filename;
-        //    }
         public function updatedPosition($request, $adBox, $AdBoxType): int
         {
             if ($adBox->type == 0) {
@@ -262,11 +272,13 @@
 
             return $data;
         }
-        public static function getRequestData($request): array
+        public static function getRequestData($request, $adBox = null): array
         {
-            $data = [
-                'position' => self::generatePosition($request, $request->type)
-            ];
+            $data = [];
+
+            if (!is_null($adBox) && $adBox->type !== AdBox::$WAITING_ACTION) {
+                $data['position'] = self::generatePosition($request, $request->type);
+            }
 
             $data['creator_user_id'] = Auth::user()->id;
             $data['type']            = self::$WAITING_ACTION;
