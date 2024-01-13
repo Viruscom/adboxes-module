@@ -89,7 +89,6 @@
         public static function generatePositionForWaitingAdBox($adBoxType): int
         {
             $adBoxes = self::where('type', $adBoxType)->orderBy('position', 'asc')->get();
-            dd($adBoxes);
             if (count($adBoxes) < 1) {
                 return 1;
             }
