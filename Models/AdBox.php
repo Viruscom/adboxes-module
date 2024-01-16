@@ -129,9 +129,13 @@
             });
 
             cache()->rememberForever('adBoxesFrontAll', function () {
-                $adBoxes = [];
+                $adBoxes                     = [];
+                $adBoxes[self::$FIRST_TYPE]  = self::firstType()->active(true)->orderByPosition('asc')->with('translations')->get();
+                $adBoxes[self::$SECOND_TYPE] = self::secondType()->active(true)->orderByPosition('asc')->with('translations')->get();
+                $adBoxes[self::$THIRD_TYPE]  = self::thirdType()->active(true)->orderByPosition('asc')->with('translations')->get();
+                $adBoxes[self::$FOURTH_TYPE] = self::fourthType()->active(true)->orderByPosition('asc')->with('translations')->get();
 
-                return self::setAdBoxesTypes($adBoxes);
+                return $adBoxes;
             });
         }
         private static function setAdBoxesTypes($array)
