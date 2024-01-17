@@ -86,9 +86,9 @@
         {
             return FileDimensionHelper::getUserInfoMessage('AdBoxes', self::getFileDimensionKey($AdBoxType));
         }
-        public static function generatePositionForWaitingAdBox($adBoxType): int
+        public static function generatePositionForWaitingAdBox(): int
         {
-            $adBoxes = self::where('type', $adBoxType)->orderBy('position', 'asc')->get();
+            $adBoxes = self::where('type', self::$WAITING_ACTION)->orderBy('position', 'asc')->get();
             if (count($adBoxes) < 1) {
                 return 1;
             }

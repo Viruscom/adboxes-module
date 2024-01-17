@@ -109,7 +109,7 @@
             $languages = LanguageHelper::getActiveLanguages();
 
             if ($adBox->type == AdBox::$WAITING_ACTION) {
-                $data['position'] = AdBox::generatePositionForWaitingAdBox($request->type);
+                $data['position'] = AdBox::generatePositionForWaitingAdBox();
             }
 
             foreach ($languages as $language) {
