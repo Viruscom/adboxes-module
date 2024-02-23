@@ -87,7 +87,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label class="control-label page-label m-r-5 p-t-7"><span class="text-purple">* </span>Покажи в рекламни карета:</label>
+                        <label class="control-label page-label m-r-5 p-t-7"><span class="text-purple">* </span>{{ __('adboxes::admin.show_in_adboxes') }}:</label>
                         <div class="btn-group" data-toggle="buttons">
                             <label class="btn btn-light-green {{ old('type') ?: 'active' }} abox-type">
                                 <input type="radio" name="type" class="adbox-type" value="1" required="" aria-required="true" {{ old('type') ?: 'checked' }}> @lang('adboxes::admin.ad_boxes_type_1')
@@ -156,40 +156,40 @@
                     <div class="form-body">
                         <div class="col-md-12">
                             <div class="form-group @if($errors->has('type_color_class')) has-error @endif">
-                                <label class="control-label p-b-10">Цвят на етикета:</label>
+                                <label class="control-label p-b-10">{{ __('adboxes::admin.label_color') }}:</label>
                                 <div class="m-b-10">
                                     <div class="pretty p-default p-round">
                                         <input type="radio" name="type_color_class" value="ad-box-type-color-1" {{( (old('type_color_class') == $adBox->type_color_class || $adBox->type_color_class == 'ad-box-type-color-1' )) ? 'checked': '' }}>
                                         <div class="state p-primary-o">
-                                            <label class="ad-box-type-color-1">Цвят 1</label>
+                                            <label class="ad-box-type-color-1">{{ __('adboxes::admin.label_color_1') }}</label>
                                         </div>
                                     </div>
 
                                     <div class="pretty p-default p-round">
                                         <input type="radio" name="type_color_class" value="ad-box-type-color-2" {{( (old('type_color_class') == $adBox->type_color_class || $adBox->type_color_class == 'ad-box-type-color-2' )) ? 'checked': '' }}>
                                         <div class="state p-primary-o">
-                                            <label class="ad-box-type-color-2">Цвят 2</label>
+                                            <label class="ad-box-type-color-2">{{ __('adboxes::admin.label_color_2') }}</label>
                                         </div>
                                     </div>
 
                                     <div class="pretty p-default p-round">
                                         <input type="radio" name="type_color_class" value="ad-box-type-color-3" {{( (old('type_color_class') == $adBox->type_color_class || $adBox->type_color_class == 'ad-box-type-color-3' )) ? 'checked': '' }}>
                                         <div class="state p-primary-o">
-                                            <label class="ad-box-type-color-3">Цвят 3</label>
+                                            <label class="ad-box-type-color-3">{{ __('adboxes::admin.label_color_3') }}</label>
                                         </div>
                                     </div>
 
                                     <div class="pretty p-default p-round">
                                         <input type="radio" name="type_color_class" value="ad-box-type-color-4" {{( (old('type_color_class') == $adBox->type_color_class || $adBox->type_color_class == 'ad-box-type-color-4' )) ? 'checked': '' }}>
                                         <div class="state p-primary-o">
-                                            <label class="ad-box-type-color-4">Цвят 4</label>
+                                            <label class="ad-box-type-color-4">{{ __('adboxes::admin.label_color_4') }}</label>
                                         </div>
                                     </div>
 
                                     <div class="pretty p-default p-round">
                                         <input type="radio" name="type_color_class" value="ad-box-type-color-5" {{( (old('type_color_class') == $adBox->type_color_class || $adBox->type_color_class == 'ad-box-type-color-5' )) ? 'checked': '' }}>
                                         <div class="state p-primary-o">
-                                            <label class="ad-box-type-color-5">Цвят 5</label>
+                                            <label class="ad-box-type-color-5">{{ __('adboxes::admin.label_color_5') }}</label>
                                         </div>
                                     </div>
                                 </div>
@@ -198,7 +198,7 @@
                         </div>
                         <div class="col-lg-6 col-xs-12">
                             <div class="form-group col-lg-m-r-0 @if($errors->has('price')) has-error @endif">
-                                <label class="control-label m-b-10">Цена (0.00):</label>
+                                <label class="control-label m-b-10">{{ __('admin.common.price') }}:</label>
                                 <input class="form-control" type="number" step="0.01" name="price" value="{{ (old('price')) ?: $adBox->price }}">
                                 @if($errors->has('price'))
                                     <span class="help-block">{{ trans($errors->first('price')) }}</span>
@@ -207,14 +207,14 @@
                                     <div class="pretty p-default p-square">
                                         <input type="checkbox" name="from_price" class="tooltips" data-toggle="tooltip" data-placement="right" data-original-title="Активирай/Деактивирай от цена" data-trigger="hover" {{ ($adBox->from_price) ? 'checked' : '' }}/>
                                         <div class="state p-primary">
-                                            <label>Активирай "От цена"</label>
+                                            <label>{{ __('admin.common.activate_from_price') }}</label>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="form-group col-lg-m-r-0 @if($errors->has('new_price')) has-error @endif">
-                                <label class="control-label m-b-10">Нова Цена (0.00):</label>
+                                <label class="control-label m-b-10">{{ __('admin.common.new_price') }}:</label>
                                 <input class="form-control" type="number" step="0.01" name="new_price" value="{{ (old('new_price')) ?: $adBox->new_price }}">
                                 @if($errors->has('new_price'))
                                     <span class="help-block">{{ trans($errors->first('new_price')) }}</span>
@@ -223,7 +223,7 @@
                                     <div class="pretty p-default p-square">
                                         <input type="checkbox" name="from_new_price" class="tooltips" data-toggle="tooltip" data-placement="right" data-original-title="Активирай/Деактивирай от цена" data-trigger="hover" {{ ($adBox->from_new_price) ? 'checked' : '' }}/>
                                         <div class="state p-primary">
-                                            <label>Активирай "От цена"</label>
+                                            <label>{{ __('admin.common.activate_from_price') }}</label>
                                         </div>
                                     </div>
                                 </div>
@@ -231,13 +231,13 @@
                         </div>
                         <div class="col-lg-6 col-xs-12">
                             <div class="form-group @if($errors->has('date_from_to')) has-error @endif">
-                                <label class="control-label m-b-10">За период (от-до):</label>
+                                <label class="control-label m-b-10">{{ __('adboxes::admin.for_period') }}:</label>
                                 <div class="input-group m-b-10">
-                                    <div class="input-group-addon">От дата</div>
+                                    <div class="input-group-addon">{{ __('adboxes::admin.from_date') }}</div>
                                     <input type="text" class="form-control" value="{{ old('from_date') ?: $adBox->from_date }}" name="from_date" id="dpd1" autocomplete="off">
                                 </div>
                                 <div class="input-group">
-                                    <div class="input-group-addon">До дата</div>
+                                    <div class="input-group-addon">{{ __('adboxes::admin.to_date') }}</div>
                                     <input type="text" class="form-control" value="{{ old('to_date') ?: $adBox->to_date }}" name="to_date" id="dpd2" autocomplete="off">
                                 </div>
                                 @if($errors->has('date_from_to'))
@@ -253,7 +253,7 @@
                                 </div>
                                 <div class="col-md-12 col-xs-12">
                                     <div class="form-group">
-                                        <label class="control-label col-md-3">Изображение:</label>
+                                        <label class="control-label col-md-3">{{ __('admin.image') }}:</label>
                                         <div class="col-md-9">
                                             <input type="file" name="image" class="filestyle" data-buttonText="@lang('admin.browse_file')" data-iconName="fas fa-upload" data-buttonName="btn green" data-badge="true">
                                             @if($adBox->isWaitingAction())
@@ -294,10 +294,10 @@
                             @if (!$adBox->isWaitingAction())
                                 <div class="col-lg-6 col-xs-12">
                                     <div>
-                                        <label class="control-label">Позиция в сайта:</label>
+                                        <label class="control-label">{{ __('admin.position_in_site') }}:</label>
                                         <p class="position-label"> № {{ $adBox->position }}</p>
-                                        <a href="#" class="btn btn-default" data-toggle="modal" data-target="#myModal">Моля, изберете позиция</a>
-                                        <p class="help-block">(ако не изберете позиция, записът се добавя като последен)</p>
+                                        <a href="#" class="btn btn-default" data-toggle="modal" data-target="#myModal">{{ __('admin.please_choose_position') }}</a>
+                                        <p class="help-block">{{ __('admin.position_description') }}</p>
                                     </div>
                                 </div>
                             @endif

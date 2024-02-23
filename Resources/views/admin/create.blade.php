@@ -81,7 +81,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
-                    <label class="control-label page-label m-r-5 p-t-7"><span class="text-purple">* </span>Покажи в рекламни карета:</label>
+                    <label class="control-label page-label m-r-5 p-t-7"><span class="text-purple">* </span>{{ __('adboxes::admin.show_in_adboxes') }}:</label>
                     <div class="btn-group" data-toggle="buttons">
                         <label class="btn btn-light-green active  abox-type">
                             <input type="radio" name="type" class="adbox-type" value="1" required="" aria-required="true" {{ (old('type')) ?? 'checked'}}> @lang('adboxes::admin.ad_boxes_type_1')
@@ -127,14 +127,14 @@
                             </div>
 
                             <div class="form-group @if($errors->has($langShortDescr)) has-error @endif">
-                                <label class="control-label p-b-10">Кратко описание (<span class="text-uppercase">{{$language->code}}</span>):</label>
+                                <label class="control-label p-b-10">{{ __('admin.common.short_description') }} (<span class="text-uppercase">{{$language->code}}</span>):</label>
                                 <textarea name="{{$langShortDescr}}" class="form-control" rows="3">{{ old($langShortDescr) }}</textarea>
                                 @if($errors->has($langShortDescr))
                                     <span class="help-block">{{ trans($errors->first($langShortDescr)) }}</span>
                                 @endif
                             </div>
                             <div class="form-group @if($errors->has($langLink)) has-error @endif hidden">
-                                <label class="control-label p-b-10"><span class="text-purple">* </span> Линк (<span class="text-uppercase">{{$language->code}}</span>):</label>
+                                <label class="control-label p-b-10"><span class="text-purple">* </span> {{ __('admin.common.link') }} (<span class="text-uppercase">{{$language->code}}</span>):</label>
                                 <input class="form-control" type="text" name="{{$langLink}}" value="{{ old($langLink) }}">
                                 @if($errors->has($langLink))
                                     <span class="help-block">{{ trans($errors->first($langLink)) }}</span>
@@ -142,7 +142,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="select_internal_link" class="control-label">Вътрешен линк (<span class="text-uppercase">{{$language->code}}</span>):</label>
+                                <label for="select_internal_link" class="control-label">{{ __('admin.common.intenal_link') }} (<span class="text-uppercase">{{$language->code}}</span>):</label>
                                 <div>
                                     <select id="select_internal_link" name="{{$langLink}}" class="form-control select2 select2-{{$language->code}}" style="width: 100%;">
                                         @include('admin.partials.on_create.select_tag_internal_links', ['language' => $language->code, 'internalLinks' => $internalLinks])
@@ -153,7 +153,7 @@
                             <div class="row">
                                 <div class="col-lg-6 col-xs-12">
                                     <div class="form-group m-t-10">
-                                        <label class="control-label col-lg-6 text-right p-t-7 p-l-0">Външен линк (<span class="text-uppercase">{{$language->code}}</span>):</label>
+                                        <label class="control-label col-lg-6 text-right p-t-7 p-l-0">{{ __('admin.common.external_link') }} (<span class="text-uppercase">{{$language->code}}</span>):</label>
                                         <div class="col-lg-6 p-l-0">
                                             <label class="switch pull-left">
                                                 <input type="checkbox" name="{{$langExternalUrl}}" class="success" data-size="small" {{(old($langExternalUrl) ? 'checked' : 'active')}}>
@@ -165,7 +165,7 @@
 
                                 <div class="col-lg-6 col-xs-12">
                                     <div class="form-group m-t-10">
-                                        <label class="control-label col-lg-6 text-right p-t-7 p-l-0">Покажи в езикова версия (<span class="text-uppercase">{{$language->code}}</span>):</label>
+                                        <label class="control-label col-lg-6 text-right p-t-7 p-l-0">{{ __('admin.common.show_in_lang_version') }} (<span class="text-uppercase">{{$language->code}}</span>):</label>
                                         <div class="col-lg-6 p-l-0">
                                             <label class="switch pull-left">
                                                 <input type="checkbox" name="{{$langVisible}}" class="success" data-size="small" checked {{(old($langVisible) ? 'checked' : 'active')}}>
@@ -185,40 +185,40 @@
                     <div class="form-body">
                         <div class="col-md-12">
                             <div class="form-group @if($errors->has('type_color_class')) has-error @endif">
-                                <label class="control-label p-b-10">Цвят на етикета:</label>
+                                <label class="control-label p-b-10">{{ __('adboxes::admin.label_color') }}:</label>
                                 <div class="m-t-10">
                                     <div class="pretty p-default p-round">
                                         <input type="radio" name="type_color_class" value="ad-box-type-color-1" checked="checked" {{old('type_color_class') ? 'checked': ''}}>
                                         <div class="state p-primary-o">
-                                            <label class="ad-box-type-color-1">Цвят 1</label>
+                                            <label class="ad-box-type-color-1">{{ __('adboxes::admin.label_color_1') }}</label>
                                         </div>
                                     </div>
 
                                     <div class="pretty p-default p-round">
                                         <input type="radio" name="type_color_class" value="ad-box-type-color-2" {{old('type_color_class') ? 'checked': ''}}>
                                         <div class="state p-primary-o">
-                                            <label class="ad-box-type-color-2">Цвят 2</label>
+                                            <label class="ad-box-type-color-2">{{ __('adboxes::admin.label_color_2') }}</label>
                                         </div>
                                     </div>
 
                                     <div class="pretty p-default p-round">
                                         <input type="radio" name="type_color_class" value="ad-box-type-color-3" {{old('type_color_class') ? 'checked': ''}}>
                                         <div class="state p-primary-o">
-                                            <label class="ad-box-type-color-3">Цвят 3</label>
+                                            <label class="ad-box-type-color-3">{{ __('adboxes::admin.label_color_3') }}</label>
                                         </div>
                                     </div>
 
                                     <div class="pretty p-default p-round">
                                         <input type="radio" name="type_color_class" value="ad-box-type-color-4" {{old('type_color_class') ? 'checked': ''}}>
                                         <div class="state p-primary-o">
-                                            <label class="ad-box-type-color-4">Цвят 4</label>
+                                            <label class="ad-box-type-color-4">{{ __('adboxes::admin.label_color_4') }}</label>
                                         </div>
                                     </div>
 
                                     <div class="pretty p-default p-round">
                                         <input type="radio" name="type_color_class" value="ad-box-type-color-5" {{old('type_color_class') ? 'checked': ''}}>
                                         <div class="state p-primary-o">
-                                            <label class="ad-box-type-color-5">Цвят 5</label>
+                                            <label class="ad-box-type-color-5">{{ __('adboxes::admin.label_color_5') }}</label>
                                         </div>
                                     </div>
                                 </div>
@@ -226,7 +226,7 @@
                         </div>
                         <div class="col-lg-6 col-xs-12">
                             <div class="form-group col-lg-m-r-0 @if($errors->has('price')) has-error @endif">
-                                <label class="control-label m-b-10">Цена (0.00):</label>
+                                <label class="control-label m-b-10">{{ __('admin.common.price') }}:</label>
                                 <input class="form-control" type="number" step="0.01" name="price" value="{{ old('price') }}">
                                 @if($errors->has('price'))
                                     <span class="help-block">{{ trans($errors->first('price')) }}</span>
@@ -235,13 +235,13 @@
                                     <div class="pretty p-default p-square">
                                         <input type="checkbox" name="from_price" class="tooltips" data-toggle="tooltip" data-placement="right" data-original-title="Активирай/Деактивирай от цена" data-trigger="hover"/>
                                         <div class="state p-primary">
-                                            <label>Активирай "От цена"</label>
+                                            <label>{{ __('admin.common.activate_from_price') }}</label>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group col-lg-m-r-0 @if($errors->has('new_price')) has-error @endif">
-                                <label class="control-label m-b-10">Нова Цена (0.00):</label>
+                                <label class="control-label m-b-10">{{ __('admin.common.new_price') }}:</label>
                                 <input class="form-control" type="number" step="0.01" name="new_price" value="{{ old('new_price') }}">
                                 @if($errors->has('new_price'))
                                     <span class="help-block">{{ trans($errors->first('new_price')) }}</span>
@@ -250,7 +250,7 @@
                                     <div class="pretty p-default p-square">
                                         <input type="checkbox" name="from_new_price" class="tooltips" data-toggle="tooltip" data-placement="right" data-original-title="Активирай/Деактивирай от цена" data-trigger="hover"/>
                                         <div class="state p-primary">
-                                            <label>Активирай "От цена"</label>
+                                            <label>{{ __('admin.common.activate_from_price') }}</label>
                                         </div>
                                     </div>
                                 </div>
@@ -258,13 +258,13 @@
                         </div>
                         <div class="col-lg-6 col-xs-12">
                             <div class="form-group @if($errors->has('date_from_to')) has-error @endif">
-                                <label class="control-label m-b-10">За период (от-до):</label>
+                                <label class="control-label m-b-10">{{ __('adboxes::admin.for_period') }}:</label>
                                 <div class="input-group m-b-10">
-                                    <div class="input-group-addon">От дата</div>
+                                    <div class="input-group-addon">{{ __('adboxes::admin.from_date') }}</div>
                                     <input type="text" class="form-control" value="" name="from_date" id="dpd1" autocomplete="off">
                                 </div>
                                 <div class="input-group">
-                                    <div class="input-group-addon">До дата</div>
+                                    <div class="input-group-addon">{{ __('adboxes::admin.to_date') }}</div>
                                     <input type="text" class="form-control" value="" name="to_date" id="dpd2" autocomplete="off">
                                 </div>
                                 @if($errors->has('date_from_to'))
@@ -300,7 +300,7 @@
                             </div>
                             <div class="col-lg-6 col-xs-12">
                                 <div class="form-group">
-                                    <label class="control-label col-lg-6">Активен (видим) в сайта:</label>
+                                    <label class="control-label col-lg-6">{{ __('admin.active_visible_on_site') }}:</label>
                                     <div class="col-lg-6">
                                         <label class="switch pull-left">
                                             <input type="checkbox" name="active" class="success" data-size="small" checked {{(old('active') ? 'checked' : 'active')}}>
@@ -312,10 +312,10 @@
 
                             <div class="col-lg-6 col-xs-12">
                                 <div>
-                                    <label class="control-label">Позиция в сайта:</label>
+                                    <label class="control-label">{{ __('admin.position_in_site') }}:</label>
                                     <p class="position-label"></p>
-                                    <a href="#" class="btn btn-default" data-toggle="modal" data-target="#myModal">Моля, изберете позиция</a>
-                                    <p class="help-block">(ако не изберете позиция, записът се добавя като последен)</p>
+                                    <a href="#" class="btn btn-default" data-toggle="modal" data-target="#myModal">{{ __('admin.please_choose_position') }}</a>
+                                    <p class="help-block">{{ __('admin.position_description') }}</p>
                                 </div>
                             </div>
                         </div>
@@ -326,9 +326,9 @@
                 <div class="form-actions">
                     <div class="row">
                         <div class="col-md-offset-3 col-md-9">
-                            <button type="submit" name="submitaddnew" value="submitaddnew" class="btn green saveplusbtn margin-bottom-10"> запиши и добави нов</button>
-                            <button type="submit" name="submit" value="submit" class="btn save-btn margin-bottom-10"><i class="fas fa-save"></i> запиши</button>
-                            <a href="{{ route('admin.ad-boxes.index') }}" role="button" class="btn back-btn margin-bottom-10"><i class="fa fa-reply"></i> назад</a>
+                            <button type="submit" name="submitaddnew" value="submitaddnew" class="btn green saveplusbtn margin-bottom-10"> {{ __('admin.common.save_and_add_new') }}</button>
+                            <button type="submit" name="submit" value="submit" class="btn save-btn margin-bottom-10"><i class="fas fa-save"></i> {{ __('admin.common.save') }}</button>
+                            <a href="{{ route('admin.ad-boxes.index') }}" role="button" class="btn back-btn margin-bottom-10"><i class="fa fa-reply"></i> {{ __('admin.common.back') }}</a>
                         </div>
                     </div>
                 </div>
@@ -341,7 +341,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close text-purple" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">Изберете позиция</h4>
+                            <h4 class="modal-title">{{ __('admin.choose_position') }}</h4>
                         </div>
                         <div class="modal-body">
                             <table class="table table-striped table-hover table-positions">
@@ -368,8 +368,8 @@
                             <div class="form-actions">
                                 <div class="row">
                                     <div class="col-md-offset-3 col-md-9">
-                                        <a href="#" class="btn save-btn margin-bottom-10 accept-position-change" data-dismiss="modal"><i class="fas fa-save"></i> потвърди</a>
-                                        <a role="button" class="btn back-btn margin-bottom-10 cancel-position-change" current-position="{{ old('position') }}" data-dismiss="modal"><i class="fa fa-reply"></i> назад</a>
+                                        <a href="#" class="btn save-btn margin-bottom-10 accept-position-change" data-dismiss="modal"><i class="fas fa-save"></i> {{ __('admin.common.apply') }}</a>
+                                        <a role="button" class="btn back-btn margin-bottom-10 cancel-position-change" current-position="{{ old('position') }}" data-dismiss="modal"><i class="fa fa-reply"></i> {{ __('admin.common.back') }}</a>
                                     </div>
                                 </div>
                             </div>
