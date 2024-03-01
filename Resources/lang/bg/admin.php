@@ -48,4 +48,5 @@
         'default_button_name_3'        => 'Бутон 3',
         'default_button_name_4'        => 'Бутон 4',
         'button_after_ad_boxes'        => 'Бутон след рекламни карета',
+        'return_to_waiting'            => 'Върни карето в изчакващи',
     );

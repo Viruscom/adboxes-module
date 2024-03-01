@@ -77,7 +77,7 @@
                 <div class="action-mass-buttons pull-right">
                     <button type="submit" name="submit" value="submit" class="btn btn-lg save-btn margin-bottom-10"><i class="fas fa-save"></i></button>
                     @if (!$adBox->isWaitingAction())
-                        <a href="{{ route('admin.ad-boxes.return-to-waiting', ['id'=>$adBox->id]) }}" role="button" class="btn btn-lg btn yellow margin-bottom-10 tooltips" style="padding: 8px 10px;" data-toggle="tooltip" data-placement="left" data-original-title="Върни карето в изчакващи"><img src="{{ asset('admin/assets/images/back_to_wait.svg') }}" width="23px"></a>
+                        <a href="{{ route('admin.ad-boxes.return-to-waiting', ['id'=>$adBox->id]) }}" role="button" class="btn btn-lg btn yellow margin-bottom-10 tooltips" style="padding: 8px 10px;" data-toggle="tooltip" data-placement="left" data-original-title="{{ __('adboxes::admin.return_to_waiting') }}"><img src="{{ asset('admin/assets/images/back_to_wait.svg') }}" width="23px"></a>
                     @endif
                     <a href="{{ route('admin.ad-boxes.index') }}" role="button" class="btn btn-lg back-btn margin-bottom-10"><i class="fa fa-reply"></i></a>
                 </div>
@@ -205,7 +205,7 @@
                                 @endif
                                 <div class="col-md-12 m-t-10 p-l-0">
                                     <div class="pretty p-default p-square">
-                                        <input type="checkbox" name="from_price" class="tooltips" data-toggle="tooltip" data-placement="right" data-original-title="Активирай/Деактивирай от цена" data-trigger="hover" {{ ($adBox->from_price) ? 'checked' : '' }}/>
+                                        <input type="checkbox" name="from_price" class="tooltips" data-toggle="tooltip" data-placement="right" data-original-title="{{ __('admin.common.activate_deactivate_from_price') }}" data-trigger="hover" {{ ($adBox->from_price) ? 'checked' : '' }}/>
                                         <div class="state p-primary">
                                             <label>{{ __('admin.common.activate_from_price') }}</label>
                                         </div>
@@ -221,7 +221,7 @@
                                 @endif
                                 <div class="col-md-12 m-t-10 p-l-0">
                                     <div class="pretty p-default p-square">
-                                        <input type="checkbox" name="from_new_price" class="tooltips" data-toggle="tooltip" data-placement="right" data-original-title="Активирай/Деактивирай от цена" data-trigger="hover" {{ ($adBox->from_new_price) ? 'checked' : '' }}/>
+                                        <input type="checkbox" name="from_new_price" class="tooltips" data-toggle="tooltip" data-placement="right" data-original-title="{{ __('admin.common.activate_deactivate_from_price') }}" data-trigger="hover" {{ ($adBox->from_new_price) ? 'checked' : '' }}/>
                                         <div class="state p-primary">
                                             <label>{{ __('admin.common.activate_from_price') }}</label>
                                         </div>

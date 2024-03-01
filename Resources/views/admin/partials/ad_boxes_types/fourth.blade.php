@@ -46,7 +46,7 @@
                                                 ?>
                                             @if($l <= 3)
                                                 <p>
-                                                    <span>Линк ({{$language->code}}): </span>
+                                                    <span>{{ __('admin.common.link') }} ({{$language->code}}): </span>
                                                     <span>
 													<a href="{{ is_null($adTrans->url) ? "":(($adTrans->external_url) ? $adTrans->url : url($adTrans->url)) }}" class="text-purple" target="_blank">{{ is_null($adTrans->url) ? "":(($adTrans->external_url) ? $adTrans->url : url($adTrans->url)) }}</a>
 												</span>
