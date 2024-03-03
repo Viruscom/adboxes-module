@@ -87,7 +87,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label class="control-label page-label m-r-5 p-t-7"><span class="text-purple">* </span>{{ __('adboxes::admin.show_in_adboxes') }}:</label>
+                        <label class="control-label page-label m-r-5 p-t-7"><span class="text-purple">* </span>{{ __('adboxes::admin.adboxes.show_in_adboxes') }}:</label>
                         <div class="btn-group" data-toggle="buttons">
                             <label class="btn btn-light-green {{ old('type') ?: 'active' }} abox-type">
                                 <input type="radio" name="type" class="adbox-type" value="1" required="" aria-required="true" {{ old('type') ?: 'checked' }}> @lang('adboxes::admin.ad_boxes_type_1')
@@ -156,40 +156,40 @@
                     <div class="form-body">
                         <div class="col-md-12">
                             <div class="form-group @if($errors->has('type_color_class')) has-error @endif">
-                                <label class="control-label p-b-10">{{ __('adboxes::admin.label_color') }}:</label>
+                                <label class="control-label p-b-10">{{ __('adboxes::admin.adboxes.label_color') }}:</label>
                                 <div class="m-b-10">
                                     <div class="pretty p-default p-round">
                                         <input type="radio" name="type_color_class" value="ad-box-type-color-1" {{( (old('type_color_class') == $adBox->type_color_class || $adBox->type_color_class == 'ad-box-type-color-1' )) ? 'checked': '' }}>
                                         <div class="state p-primary-o">
-                                            <label class="ad-box-type-color-1">{{ __('adboxes::admin.label_color_1') }}</label>
+                                            <label class="ad-box-type-color-1">{{ __('adboxes::admin.adboxes.label_color_1') }}</label>
                                         </div>
                                     </div>
 
                                     <div class="pretty p-default p-round">
                                         <input type="radio" name="type_color_class" value="ad-box-type-color-2" {{( (old('type_color_class') == $adBox->type_color_class || $adBox->type_color_class == 'ad-box-type-color-2' )) ? 'checked': '' }}>
                                         <div class="state p-primary-o">
-                                            <label class="ad-box-type-color-2">{{ __('adboxes::admin.label_color_2') }}</label>
+                                            <label class="ad-box-type-color-2">{{ __('adboxes::admin.adboxes.label_color_2') }}</label>
                                         </div>
                                     </div>
 
                                     <div class="pretty p-default p-round">
                                         <input type="radio" name="type_color_class" value="ad-box-type-color-3" {{( (old('type_color_class') == $adBox->type_color_class || $adBox->type_color_class == 'ad-box-type-color-3' )) ? 'checked': '' }}>
                                         <div class="state p-primary-o">
-                                            <label class="ad-box-type-color-3">{{ __('adboxes::admin.label_color_3') }}</label>
+                                            <label class="ad-box-type-color-3">{{ __('adboxes::admin.adboxes.label_color_3') }}</label>
                                         </div>
                                     </div>
 
                                     <div class="pretty p-default p-round">
                                         <input type="radio" name="type_color_class" value="ad-box-type-color-4" {{( (old('type_color_class') == $adBox->type_color_class || $adBox->type_color_class == 'ad-box-type-color-4' )) ? 'checked': '' }}>
                                         <div class="state p-primary-o">
-                                            <label class="ad-box-type-color-4">{{ __('adboxes::admin.label_color_4') }}</label>
+                                            <label class="ad-box-type-color-4">{{ __('adboxes::admin.adboxes.label_color_4') }}</label>
                                         </div>
                                     </div>
 
                                     <div class="pretty p-default p-round">
                                         <input type="radio" name="type_color_class" value="ad-box-type-color-5" {{( (old('type_color_class') == $adBox->type_color_class || $adBox->type_color_class == 'ad-box-type-color-5' )) ? 'checked': '' }}>
                                         <div class="state p-primary-o">
-                                            <label class="ad-box-type-color-5">{{ __('adboxes::admin.label_color_5') }}</label>
+                                            <label class="ad-box-type-color-5">{{ __('adboxes::admin.adboxes.label_color_5') }}</label>
                                         </div>
                                     </div>
                                 </div>
@@ -231,13 +231,13 @@
                         </div>
                         <div class="col-lg-6 col-xs-12">
                             <div class="form-group @if($errors->has('date_from_to')) has-error @endif">
-                                <label class="control-label m-b-10">{{ __('adboxes::admin.for_period') }}:</label>
+                                <label class="control-label m-b-10">{{ __('adboxes::admin.adboxes.for_period') }}:</label>
                                 <div class="input-group m-b-10">
-                                    <div class="input-group-addon">{{ __('adboxes::admin.from_date') }}</div>
+                                    <div class="input-group-addon">{{ __('adboxes::admin.adboxes.from_date') }}</div>
                                     <input type="text" class="form-control" value="{{ old('from_date') ?: $adBox->from_date }}" name="from_date" id="dpd1" autocomplete="off">
                                 </div>
                                 <div class="input-group">
-                                    <div class="input-group-addon">{{ __('adboxes::admin.to_date') }}</div>
+                                    <div class="input-group-addon">{{ __('adboxes::admin.adboxes.to_date') }}</div>
                                     <input type="text" class="form-control" value="{{ old('to_date') ?: $adBox->to_date }}" name="to_date" id="dpd2" autocomplete="off">
                                 </div>
                                 @if($errors->has('date_from_to'))

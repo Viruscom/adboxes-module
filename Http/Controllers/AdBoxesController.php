@@ -44,6 +44,11 @@
             foreach ($languages as $language) {
                 $data[$language->code] = AdBoxTranslation::getLanguageArray($language, $request);
             }
+            
+            if ($request->type !== AdBox::$WAITING_ACTION) {
+                $data['position'] = AdBox::generatePosition($request, $request->type);
+            }
+
             $adBox = AdBox::create($data);
             if ($request->has('image')) {
                 $adBox->saveFile($request->image);
