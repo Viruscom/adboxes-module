@@ -91,13 +91,122 @@
             return FileDimensionHelper::getUserInfoMessage('AdBoxes', self::getFileDimensionKey($AdBoxType));
         }
 
-        public static function generatePositionForWaitingAdBox($type = null): int
+        public static function prepareDataForStorage($request): array
         {
-            if (is_null($type)) {
-                $type = self::$WAITING_ACTION;
+            $data = self::getRequestData($request);
+            if ($request->type != self::$WAITING_ACTION) {
+                $data['position'] = self::generatePosition($request, $request->type);
             }
-            $adBoxes = self::where('type', $type)->orderBy('position', 'asc')->get();
-            if (count($adBoxes) < 1) {
+
+            return $data;
+        }
+
+        public static function getRequestData($request, $adBox = null): array
+        {
+            $data = [
+                'creator_user_id' => Auth::user()->id,
+                'type'            => $request->has('type') ? $request['type'] : self::$WAITING_ACTION,
+                'active'          => false,
+                'from_price'      => false,
+                'price'           => $request->has('price') && $request->price != '' ? $request->price : 0,
+                'from_new_price'  => false,
+                'new_price'       => $request->has('new_price') && $request->new_price != '' ? $request->new_price : 0,
+                'from_date'       => null,
+                'to_date'         => null,
+                'date'            => null,
+            ];
+
+            if ($request->has('active')) {
+                $data['active'] = filter_var($request->active, FILTER_VALIDATE_BOOLEAN);
+            }
+
+            if ($request->has('type_color_class')) {
+                $data['type_color_class'] = $request->type_color_class;
+            }
+
+            if ($request->has('filename')) {
+                $data['filename'] = $request->filename;
+            }
+
+            if ($request->has('from_price')) {
+                $data['from_price'] = filter_var($request->from_price, FILTER_VALIDATE_BOOLEAN);
+            }
+
+            if ($request->has('from_new_price')) {
+                $data['from_new_price'] = filter_var($request->from_new_price, FILTER_VALIDATE_BOOLEAN);
+            }
+
+            if ($request->has('date') && $request->date != "") {
+                $data['date'] = Carbon::parse($request->date)->format('Y-m-d');
+            } else {
+                if ($request->has('from_date') && $request->from_date != "") {
+                    $data['from_date'] = Carbon::parse($request->from_date)->format('Y-m-d');
+                }
+
+                if ($request->has('to_date') && $request->to_date != "") {
+                    $data['to_date'] = Carbon::parse($request->to_date)->format('Y-m-d');
+                }
+            }
+
+            if ($request->hasFile('image')) {
+                $data['filename'] = pathinfo(CommonActions::getValidFilenameStatic($request->image->getClientOriginalName()), PATHINFO_FILENAME) . '.' . $request->image->getClientOriginalExtension();
+            }
+
+            return $data;
+        }
+
+        public static function generatePosition($request, $AdBoxType): int
+        {
+            $adBoxes = self::whereType($AdBoxType)->orderByPosition('desc')->get();
+
+            if ($adBoxes->isEmpty()) {
+                return 1;
+            }
+
+            if (!$request->has('position') || is_null($request['position'])) {
+                return $adBoxes->first()->position + 1;
+            }
+
+            $newPosition = $request['position'];
+
+            if ($newPosition > $adBoxes->first()->position) {
+                return $adBoxes->first()->position + 1;
+            }
+
+            return $newPosition;
+        }
+
+        public function updatePositions($currentPosition, $newPosition)
+        {
+            if ($newPosition > $currentPosition) {
+                self::whereType($this->type)->whereBetween('position', [$currentPosition + 1, $newPosition])->decrement('position');
+            } else {
+                self::whereType($this->type)->whereBetween('position', [$newPosition, $currentPosition - 1])->increment('position');
+            }
+
+            $this->update(['position' => $newPosition]);
+        }
+
+        public static function prepareDataForUpdate($request, $adBox): array
+        {
+            $data = self::getRequestData($request, $adBox);
+
+            $data['position'] = $adBox->type == self::$WAITING_ACTION ?
+                self::generatePositionForWaitingAdBox($request->type) :
+                self::generatePosition($request, $request->type);
+
+            return $data;
+        }
+
+        public static function generatePositionForWaitingAdBox($AdBoxType = null): int
+        {
+            if (is_null($AdBoxType)) {
+                $AdBoxType = self::$WAITING_ACTION;
+            }
+
+            $adBoxes = self::whereType($AdBoxType)->orderByPosition('asc')->get();
+
+            if ($adBoxes->isEmpty()) {
                 return 1;
             }
 
@@ -158,6 +267,14 @@
 
             return $array;
         }
+        //    public function imageUrl()
+        //    {
+        //        if ($this->filename == '' || !file_exists(public_path(self::$IMAGES_PATH . '/' . $this->id . '/' . $this->filename))) {
+        //            return url($this->getSystemImage());
+        //        }
+        //
+        //        return url(self::$IMAGES_PATH . '/' . $this->id) . '/' . $this->filename;
+        //    }
 
         public function directoryPath()
         {
@@ -209,14 +326,7 @@
         {
             return AdminHelper::getSystemImage(self::${'AD_BOX_' . $this->type . '_SYSTEM_IMAGE'});
         }
-        //    public function imageUrl()
-        //    {
-        //        if ($this->filename == '' || !file_exists(public_path(self::$IMAGES_PATH . '/' . $this->id . '/' . $this->filename))) {
-        //            return url($this->getSystemImage());
-        //        }
-        //
-        //        return url(self::$IMAGES_PATH . '/' . $this->id) . '/' . $this->filename;
-        //    }
+
         public function getUrl($languageSlug)
         {
             if (!is_null($this->url)) {
@@ -277,7 +387,7 @@
          *
          * @return void
          */
-        private static function updateAdBoxPosition($adboxes, $increment = true): void
+        private static function updateAdBoxPosition($adboxes, bool $increment = true): void
         {
             foreach ($adboxes as $AdBoxUpdate) {
                 $position = ($increment) ? $AdBoxUpdate->position + 1 : $AdBoxUpdate->position - 1;
@@ -294,95 +404,6 @@
             }
 
             return $data;
-        }
-
-        public static function getRequestData($request, $adBox = null): array
-        {
-            $data = [];
-
-            if (!is_null($adBox) && $adBox->type !== AdBox::$WAITING_ACTION) {
-                $data['position'] = self::generatePosition($request, $request->type);
-            }
-
-            $data['creator_user_id'] = Auth::user()->id;
-            $data['type']            = self::$WAITING_ACTION;
-
-            if ($request->has('type')) {
-                $data['type'] = $request['type'];
-            }
-
-            $data['active'] = false;
-            if ($request->has('active')) {
-                $data['active'] = filter_var($request->active, FILTER_VALIDATE_BOOLEAN);
-            }
-
-            if ($request->has('type_color_class')) {
-                $data['type_color_class'] = $request->type_color_class;
-            }
-            if ($request->has('filename')) {
-                $data['filename'] = $request->filename;
-            }
-
-            $data['from_price'] = false;
-            if ($request->has('from_price')) {
-                $data['from_price'] = filter_var($request->from_price, FILTER_VALIDATE_BOOLEAN);
-            }
-
-            $data['price'] = 0;
-            if ($request->has('price') && $request->price != '') {
-                $data['price'] = $request->price;
-            }
-
-            $data['from_new_price'] = false;
-            if ($request->has('from_new_price')) {
-                $data['from_new_price'] = filter_var($request->from_new_price, FILTER_VALIDATE_BOOLEAN);
-            }
-
-            $data['new_price'] = 0;
-            if ($request->has('new_price') && $request->new_price != '') {
-                $data['new_price'] = $request->new_price;
-            }
-
-            $data['from_date'] = null;
-            $data['to_date']   = null;
-            if ($request->has('date') && $request->date != "") {
-                $data['date'] = Carbon::parse($request->date)->format('Y-m-d');
-            } else {
-                if ($request->has('from_date') && $request->from_date != "") {
-                    $data['from_date'] = Carbon::parse($request->from_date)->format('Y-m-d');
-                }
-
-                if ($request->has('to_date') && $request->to_date != "") {
-                    $data['to_date'] = Carbon::parse($request->to_date)->format('Y-m-d');
-                }
-
-                $data['date'] = null;
-            }
-
-            if ($request->hasFile('image')) {
-                $data['filename'] = pathinfo(CommonActions::getValidFilenameStatic($request->image->getClientOriginalName()), PATHINFO_FILENAME) . '.' . $request->image->getClientOriginalExtension();
-            }
-
-            return $data;
-        }
-
-        public static function generatePosition($request, $AdBoxType): int
-        {
-            $adboxes = self::where('type', $AdBoxType)->orderBy('position', 'desc')->get();
-            if (count($adboxes) < 1) {
-                return 1;
-            }
-            if (!$request->has('position') || is_null($request['position'])) {
-                return $adboxes->first()->position + 1;
-            }
-
-            if ($request['position'] > $adboxes->first()->position) {
-                return $adboxes->first()->position + 1;
-            }
-            $adboxesToUpdate = self::where('type', $AdBoxType)->where('position', '>=', $request['position'])->get();
-            self::updateAdBoxPosition($adboxesToUpdate, true);
-
-            return $request['position'];
         }
 
         public function scopeWaitingAction($query)
@@ -410,9 +431,29 @@
             return $query->where('type', self::$FOURTH_TYPE);
         }
 
+        public function scopeWhereType($query, $position)
+        {
+            $query->where('type', $position);
+        }
+
+        public function scopeWherePositionAbove($query, $position)
+        {
+            $query->where('position', '>', $position);
+        }
+
+        public function scopeWherePositionAboveOrEqual($query, $position)
+        {
+            $query->where('position', '>=', $position);
+        }
+
+        public function scopeWherePosition($query, $position)
+        {
+            $query->where('position', $position);
+        }
+
         public function isWaitingAction(): bool
         {
-            return $this->type === self::$WAITING_ACTION;
+            return $this->type == self::$WAITING_ACTION;
         }
 
         public function getFilepath($filename): string

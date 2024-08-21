@@ -110,7 +110,7 @@
             <div class="col-sm-6 col-xs-12">
                 <ul class="nav nav-tabs">
                     @foreach($languages as $language)
-                        <li @if($language->code === config('default.app.admin_language.code')) class="active" @endif><a data-toggle="tab" href="#{{$language->code}}">{{$language->code}} <span class="err-span-{{$language->code}} hidden text-purple"><i class="fas fa-exclamation"></i></span></a></li>
+                        <li @if($language->code == config('default.app.admin_language.code')) class="active" @endif><a data-toggle="tab" href="#{{$language->code}}">{{$language->code}} <span class="err-span-{{$language->code}} hidden text-purple"><i class="fas fa-exclamation"></i></span></a></li>
                     @endforeach
                 </ul>
                 <div class="tab-content">
@@ -120,7 +120,7 @@
                             $langShortDescr = 'short_description_' . $language->code;
                             ?>
 
-                        <div id="{{$language->code}}" class="tab-pane fade in @if($language->code === config('default.app.language.code')) active @endif">
+                        <div id="{{$language->code}}" class="tab-pane fade in @if($language->code == config('default.app.language.code')) active @endif">
                             <div class="row">
                                 <div class="col-md-6">
                                     @include('admin.partials.on_edit.form_fields.input_text', ['model'=> $adTrans, 'fieldName' => 'title_' . $language->code, 'label' => trans('admin.title'), 'required' => true])
@@ -326,13 +326,14 @@
                                         @foreach($adBoxesAdminAll[$adBox->type] as $adBox)
                                             <tr class="pickPositionTr" data-position="{{$adBox->position}}">
                                                 <td>{{$adBox->position}}</td>
-                                                <td>{{$adBox->translate('bg')->title}}</td>
+                                                <td>
+                                                    {{$adBox->translate('bg')->title}}
+                                                    @if($loop->last)
+                                                        <p class="modal-last-position">{{ trans('admin.common.last_position') }}</p>
+                                                    @endif
+                                                </td>
                                             </tr>
                                         @endforeach
-                                        <tr class="pickPositionTr" data-position="{{$adBoxesAdminAll[$adBox->type]->last()->position+1}}">
-                                            <td>{{$adBoxesAdminAll[$adBox->type]->last()->position+1}}</td>
-                                            <td>--{{trans('admin.common.last_position')}}--</td>
-                                        </tr>
                                     @else
                                         <tr class="pickPositionTr" data-position="1">
                                             <td>1</td>
