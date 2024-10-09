@@ -5,7 +5,6 @@
     use App\Helpers\AdminHelper;
     use App\Helpers\FileDimensionHelper;
     use App\Traits\CommonActions;
-    use App\Traits\HasModelRatios;
     use App\Traits\Scopes;
     use App\Traits\StorageActions;
     use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
@@ -18,15 +17,14 @@
 
     class AdBox extends Model implements TranslatableContract
     {
-        use Translatable, StorageActions, Scopes, HasModelRatios;
+        use Translatable, StorageActions, Scopes;
 
         public const PREVIEW_PERMISSION          = "ad_boxes_preview";
         public const PREVIEW_AND_EDIT_PERMISSION = "ad_boxes_preview_and_edit";
         public const FILES_PATH                  = "ad_boxes";
 
-        //    public static string $IMAGES_PATH            = "images/adboxes";
         public const CURRENCY_DECIMALS            = 2;
-        public const CURRENCY_SEPARATOR           = '.';
+        public const CURRENCY_SEPARATOR           = ',';
         public const CURRENCY_THOUSANDS_SEPARATOR = '';
         public static int    $WAITING_ACTION         = 0;
         public static int    $FIRST_TYPE             = 1;
@@ -37,10 +35,10 @@
         public static string $AD_BOX_2_SYSTEM_IMAGE  = 'adboxes_2_image.png';
         public static string $AD_BOX_3_SYSTEM_IMAGE  = 'adboxes_3_image.png';
         public static string $AD_BOX_4_SYSTEM_IMAGE  = 'adboxes_4_image.png';
-        public static string $AD_BOX_1_MIMES         = "jpg,jpeg,png,gif,webp";
-        public static string $AD_BOX_2_MIMES         = "jpg,jpeg,png,gif,webp";
-        public static string $AD_BOX_3_MIMES         = "jpg,jpeg,png,gif,webp";
-        public static string $AD_BOX_4_MIMES         = "jpg,jpeg,png,gif,webp";
+        public static string $AD_BOX_1_MIMES         = "jpg,jpeg,png,gif";
+        public static string $AD_BOX_2_MIMES         = "jpg,jpeg,png,gif";
+        public static string $AD_BOX_3_MIMES         = "jpg,jpeg,png,gif";
+        public static string $AD_BOX_4_MIMES         = "jpg,jpeg,png,gif";
         public static string $AD_BOX_1_RATIO         = "3/2";
         public static string $AD_BOX_2_RATIO         = "3/2";
         public static string $AD_BOX_3_RATIO         = "1/1";
@@ -89,128 +87,6 @@
         public static function getFileRuleMessage($AdBoxType): string
         {
             return FileDimensionHelper::getUserInfoMessage('AdBoxes', self::getFileDimensionKey($AdBoxType));
-        }
-
-        public static function prepareDataForStorage($request): array
-        {
-            $data = self::getRequestData($request);
-            if ($request->type != self::$WAITING_ACTION) {
-                $data['position'] = self::generatePosition($request, $request->type);
-            }
-
-            return $data;
-        }
-
-        public static function getRequestData($request, $adBox = null): array
-        {
-            $data = [
-                'creator_user_id' => Auth::user()->id,
-                'type'            => $request->has('type') ? $request['type'] : self::$WAITING_ACTION,
-                'active'          => false,
-                'from_price'      => false,
-                'price'           => $request->has('price') && $request->price != '' ? $request->price : 0,
-                'from_new_price'  => false,
-                'new_price'       => $request->has('new_price') && $request->new_price != '' ? $request->new_price : 0,
-                'from_date'       => null,
-                'to_date'         => null,
-                'date'            => null,
-            ];
-
-            if ($request->has('active')) {
-                $data['active'] = filter_var($request->active, FILTER_VALIDATE_BOOLEAN);
-            }
-
-            if ($request->has('type_color_class')) {
-                $data['type_color_class'] = $request->type_color_class;
-            }
-
-            if ($request->has('filename')) {
-                $data['filename'] = $request->filename;
-            }
-
-            if ($request->has('from_price')) {
-                $data['from_price'] = filter_var($request->from_price, FILTER_VALIDATE_BOOLEAN);
-            }
-
-            if ($request->has('from_new_price')) {
-                $data['from_new_price'] = filter_var($request->from_new_price, FILTER_VALIDATE_BOOLEAN);
-            }
-
-            if ($request->has('date') && $request->date != "") {
-                $data['date'] = Carbon::parse($request->date)->format('Y-m-d');
-            } else {
-                if ($request->has('from_date') && $request->from_date != "") {
-                    $data['from_date'] = Carbon::parse($request->from_date)->format('Y-m-d');
-                }
-
-                if ($request->has('to_date') && $request->to_date != "") {
-                    $data['to_date'] = Carbon::parse($request->to_date)->format('Y-m-d');
-                }
-            }
-
-            if ($request->hasFile('image')) {
-                $data['filename'] = pathinfo(CommonActions::getValidFilenameStatic($request->image->getClientOriginalName()), PATHINFO_FILENAME) . '.' . $request->image->getClientOriginalExtension();
-            }
-
-            return $data;
-        }
-
-        public static function generatePosition($request, $AdBoxType): int
-        {
-            $adBoxes = self::whereType($AdBoxType)->orderByPosition('desc')->get();
-
-            if ($adBoxes->isEmpty()) {
-                return 1;
-            }
-
-            if (!$request->has('position') || is_null($request['position'])) {
-                return $adBoxes->first()->position + 1;
-            }
-
-            $newPosition = $request['position'];
-
-            if ($newPosition > $adBoxes->first()->position) {
-                return $adBoxes->first()->position + 1;
-            }
-
-            return $newPosition;
-        }
-
-        public function updatePositions($currentPosition, $newPosition)
-        {
-            if ($newPosition > $currentPosition) {
-                self::whereType($this->type)->whereBetween('position', [$currentPosition + 1, $newPosition])->decrement('position');
-            } else {
-                self::whereType($this->type)->whereBetween('position', [$newPosition, $currentPosition - 1])->increment('position');
-            }
-
-            $this->update(['position' => $newPosition]);
-        }
-
-        public static function prepareDataForUpdate($request, $adBox): array
-        {
-            $data = self::getRequestData($request, $adBox);
-
-            $data['position'] = $adBox->type == self::$WAITING_ACTION ?
-                self::generatePositionForWaitingAdBox($request->type) :
-                self::generatePosition($request, $request->type);
-
-            return $data;
-        }
-
-        public static function generatePositionForWaitingAdBox($AdBoxType = null): int
-        {
-            if (is_null($AdBoxType)) {
-                $AdBoxType = self::$WAITING_ACTION;
-            }
-
-            $adBoxes = self::whereType($AdBoxType)->orderByPosition('asc')->get();
-
-            if ($adBoxes->isEmpty()) {
-                return 1;
-            }
-
-            return $adBoxes->last()->position + 1;
         }
 
         protected static function boot(): void
@@ -267,14 +143,6 @@
 
             return $array;
         }
-        //    public function imageUrl()
-        //    {
-        //        if ($this->filename == '' || !file_exists(public_path(self::$IMAGES_PATH . '/' . $this->id . '/' . $this->filename))) {
-        //            return url($this->getSystemImage());
-        //        }
-        //
-        //        return url(self::$IMAGES_PATH . '/' . $this->id) . '/' . $this->filename;
-        //    }
 
         public function directoryPath()
         {
@@ -286,38 +154,34 @@
             $array[1]['sys_image_name'] = trans('adboxes::admin.adboxes.index') . ': ' . trans('adboxes::admin.ad_boxes_type_1');
             $array[1]['sys_image']      = self::$AD_BOX_1_SYSTEM_IMAGE;
             $array[1]['sys_image_path'] = AdminHelper::getSystemImage(self::$AD_BOX_1_SYSTEM_IMAGE);
-            $array[1]['field_name']     = 'adbox_first';
-            $array[1]['ratio']          = self::getModelRatio('adbox_first');
-            $array[1]['mimes']          = self::getModelMime('adbox_first');
-            $array[1]['max_file_size']  = self::getModelMaxFileSize('adbox_first');
-            $array[1]['file_rules']     = 'mimes:' . self::getModelMime('adbox_first') . '|size:' . self::getModelMaxFileSize('adbox_first') . '|dimensions:ratio=' . self::getModelRatio('adbox_first');
+            $array[1]['ratio']          = self::$AD_BOX_1_RATIO;
+            $array[1]['mimes']          = self::$AD_BOX_1_MIMES;
+            $array[1]['max_file_size']  = self::$AD_BOX_1_MAX_FILE_SIZE;
+            $array[1]['file_rules']     = 'mimes:' . self::$AD_BOX_1_MIMES . '|size:' . self::$AD_BOX_1_MAX_FILE_SIZE . '|dimensions:ratio=' . self::$AD_BOX_1_RATIO;
 
             $array[2]['sys_image_name'] = trans('adboxes::admin.adboxes.index') . ': ' . trans('adboxes::admin.ad_boxes_type_2');
             $array[2]['sys_image']      = self::$AD_BOX_2_SYSTEM_IMAGE;
             $array[2]['sys_image_path'] = AdminHelper::getSystemImage(self::$AD_BOX_2_SYSTEM_IMAGE);
-            $array[2]['field_name']     = 'adbox_second';
-            $array[2]['ratio']          = self::getModelRatio('adbox_second');
-            $array[2]['mimes']          = self::getModelMime('adbox_second');
-            $array[2]['max_file_size']  = self::getModelMaxFileSize('adbox_second');
-            $array[2]['file_rules']     = 'mimes:' . self::getModelMime('adbox_second') . '|size:' . self::getModelMaxFileSize('adbox_second') . '|dimensions:ratio=' . self::getModelRatio('adbox_second');
+            $array[2]['ratio']          = self::$AD_BOX_2_RATIO;
+            $array[2]['mimes']          = self::$AD_BOX_2_MIMES;
+            $array[2]['max_file_size']  = self::$AD_BOX_2_MAX_FILE_SIZE;
+            $array[2]['file_rules']     = 'mimes:' . self::$AD_BOX_2_MIMES . '|size:' . self::$AD_BOX_2_MAX_FILE_SIZE . '|dimensions:ratio=' . self::$AD_BOX_2_RATIO;
 
             $array[3]['sys_image_name'] = trans('adboxes::admin.adboxes.index') . ': ' . trans('adboxes::admin.ad_boxes_type_3');
             $array[3]['sys_image']      = self::$AD_BOX_3_SYSTEM_IMAGE;
             $array[3]['sys_image_path'] = AdminHelper::getSystemImage(self::$AD_BOX_3_SYSTEM_IMAGE);
-            $array[3]['field_name']     = 'adbox_third';
-            $array[3]['ratio']          = self::getModelRatio('adbox_third');
-            $array[3]['mimes']          = self::getModelMime('adbox_third');
-            $array[3]['max_file_size']  = self::getModelMaxFileSize('adbox_third');
-            $array[3]['file_rules']     = 'mimes:' . self::getModelMime('adbox_third') . '|size:' . self::getModelMaxFileSize('adbox_third') . '|dimensions:ratio=' . self::getModelRatio('adbox_third');
+            $array[3]['ratio']          = self::$AD_BOX_3_RATIO;
+            $array[3]['mimes']          = self::$AD_BOX_3_MIMES;
+            $array[3]['max_file_size']  = self::$AD_BOX_3_MAX_FILE_SIZE;
+            $array[3]['file_rules']     = 'mimes:' . self::$AD_BOX_3_MIMES . '|size:' . self::$AD_BOX_3_MAX_FILE_SIZE . '|dimensions:ratio=' . self::$AD_BOX_3_RATIO;
 
             $array[4]['sys_image_name'] = trans('adboxes::admin.adboxes.index') . ': ' . trans('adboxes::admin.ad_boxes_type_4');
             $array[4]['sys_image']      = self::$AD_BOX_4_SYSTEM_IMAGE;
             $array[4]['sys_image_path'] = AdminHelper::getSystemImage(self::$AD_BOX_4_SYSTEM_IMAGE);
-            $array[4]['field_name']     = 'adbox_fourth';
-            $array[4]['ratio']          = self::getModelRatio('adbox_fourth');
-            $array[4]['mimes']          = self::getModelMime('adbox_fourth');
-            $array[4]['max_file_size']  = self::getModelMaxFileSize('adbox_fourth');
-            $array[4]['file_rules']     = 'mimes:' . self::getModelMime('adbox_fourth') . '|size:' . self::getModelMaxFileSize('adbox_fourth') . '|dimensions:ratio=' . self::getModelRatio('adbox_fourth');
+            $array[4]['ratio']          = self::$AD_BOX_4_RATIO;
+            $array[4]['mimes']          = self::$AD_BOX_4_MIMES;
+            $array[4]['max_file_size']  = self::$AD_BOX_4_MAX_FILE_SIZE;
+            $array[4]['file_rules']     = 'mimes:' . self::$AD_BOX_4_MIMES . '|size:' . self::$AD_BOX_4_MAX_FILE_SIZE . '|dimensions:ratio=' . self::$AD_BOX_4_RATIO;
 
             return $array;
         }
@@ -343,7 +207,7 @@
         public function updatedPosition($request, $adBox, $AdBoxType): int
         {
             if ($adBox->type == 0) {
-                $lastPosition        = self::where('type', $AdBoxType)->get()->max('position');
+                $lastPosition        = self::where('type', $AdBoxType)->max('position');
                 $request['position'] = $lastPosition + 1;
 
                 return $request['position'];
@@ -360,12 +224,6 @@
                 return $request['position'];
             }
 
-            if ($request['position'] > $adboxes->first()->position) {
-                $request['position'] = $adboxes->first()->position;
-            } elseif ($request['position'] < $adboxes->last()->position) {
-                $request['position'] = $adboxes->last()->position;
-            }
-
             if ($request['position'] >= $this->position) {
                 $adboxesToUpdate = self::where('type', $AdBoxType)->where('id', '<>', $this->id)->where('position', '>', $this->position)->where('position', '<=', $request['position'])->get();
                 self::updateAdBoxPosition($adboxesToUpdate, false);
@@ -379,15 +237,7 @@
             return $request['position'];
         }
 
-        /**
-         * Update adbox position
-         *
-         * @param $adboxes / Adboxes to update
-         * @param bool $increment / Increment (true) or decrement (false)
-         *
-         * @return void
-         */
-        private static function updateAdBoxPosition($adboxes, bool $increment = true): void
+        private static function updateAdBoxPosition($adboxes, $increment = true): void
         {
             foreach ($adboxes as $AdBoxUpdate) {
                 $position = ($increment) ? $AdBoxUpdate->position + 1 : $AdBoxUpdate->position - 1;
@@ -406,9 +256,138 @@
             return $data;
         }
 
+        public static function getRequestData($request, $adBox = null): array
+        {
+            $data = [];
+
+            if (is_null($adBox)) {
+                // Creating a new adBox
+                if ($request->has('position') && !is_null($request->position)) {
+                    $data['position'] = $request->position;
+                } else {
+                    $data['position'] = self::getNextAvailablePosition($request->type);
+                }
+            } else {
+                // Updating an existing adBox
+                $data['position'] = $adBox->position;
+                if ($request->has('position') && $request->position != $adBox->position) {
+                    $data['position'] = $request->position;
+                }
+            }
+
+            $data['creator_user_id'] = Auth::user()->id;
+            $data['type']            = self::$WAITING_ACTION;
+
+            if ($request->has('type')) {
+                $data['type'] = $request['type'];
+            }
+
+            $data['active'] = false;
+            if ($request->has('active')) {
+                $data['active'] = filter_var($request->active, FILTER_VALIDATE_BOOLEAN);
+            }
+
+            if ($request->has('type_color_class')) {
+                $data['type_color_class'] = $request->type_color_class;
+            }
+            if ($request->has('filename')) {
+                $data['filename'] = $request->filename;
+            }
+
+            $data['from_price'] = false;
+            if ($request->has('from_price')) {
+                $data['from_price'] = filter_var($request->from_price, FILTER_VALIDATE_BOOLEAN);
+            }
+
+            $data['price'] = 0;
+            if ($request->has('price') && $request->price != '') {
+                $data['price'] = $request->price;
+            }
+
+            $data['from_new_price'] = false;
+            if ($request->has('from_new_price')) {
+                $data['from_new_price'] = filter_var($request->from_new_price, FILTER_VALIDATE_BOOLEAN);
+            }
+
+            $data['new_price'] = 0;
+            if ($request->has('new_price') && $request->new_price != '') {
+                $data['new_price'] = $request->new_price;
+            }
+
+            $data['from_date'] = null;
+            $data['to_date']   = null;
+            if ($request->has('date') && $request->date != "") {
+                $data['date'] = Carbon::parse($request->date)->format('Y-m-d');
+            } else {
+                if ($request->has('from_date') && $request->from_date != "") {
+                    $data['from_date'] = Carbon::parse($request->from_date)->format('Y-m-d');
+                }
+
+                if ($request->has('to_date') && $request->to_date != "") {
+                    $data['to_date'] = Carbon::parse($request->to_date)->format('Y-m-d');
+                }
+
+                $data['date'] = null;
+            }
+
+            if ($request->hasFile('image')) {
+                $data['filename'] = pathinfo(CommonActions::getValidFilenameStatic($request->image->getClientOriginalName()), PATHINFO_FILENAME) . '.' . $request->image->getClientOriginalExtension();
+            }
+
+            return $data;
+        }
+
+        public static function getNextAvailablePosition($type): int
+        {
+            $maxPosition = self::where('type', $type)->max('position');
+
+            return is_null($maxPosition) ? 1 : $maxPosition + 1;
+        }
+
+        public function adjustPositions($oldPosition, $newPosition)
+        {
+            if ($oldPosition == $newPosition) {
+                return;
+            }
+
+            if ($newPosition > $oldPosition) {
+                self::where('type', $this->type)
+                    ->where('position', '>', $oldPosition)
+                    ->where('position', '<=', $newPosition)
+                    ->decrement('position');
+            } else {
+                self::where('type', $this->type)
+                    ->where('position', '>=', $newPosition)
+                    ->where('position', '<', $oldPosition)
+                    ->increment('position');
+            }
+        }
+
+
+        public static function adjustPositionsOnCreate($type, $position)
+        {
+            self::where('type', $type)
+                ->where('position', '>=', $position)
+                ->increment('position');
+        }
+
+        public static function prepareDataForUpdate($request, $adBox): array
+        {
+            $data = self::getRequestData($request, $adBox);
+
+            // No need to adjust 'position' here
+
+            return $data;
+        }
+
         public function scopeWaitingAction($query)
         {
             return $query->where('type', self::$WAITING_ACTION);
+        }
+
+        public function scopeActive($query, $active)
+        {
+            return $query->where('active', $active);
         }
 
         public function scopeFirstType($query)
@@ -431,29 +410,9 @@
             return $query->where('type', self::$FOURTH_TYPE);
         }
 
-        public function scopeWhereType($query, $position)
-        {
-            $query->where('type', $position);
-        }
-
-        public function scopeWherePositionAbove($query, $position)
-        {
-            $query->where('position', '>', $position);
-        }
-
-        public function scopeWherePositionAboveOrEqual($query, $position)
-        {
-            $query->where('position', '>=', $position);
-        }
-
-        public function scopeWherePosition($query, $position)
-        {
-            $query->where('position', $position);
-        }
-
         public function isWaitingAction(): bool
         {
-            return $this->type == self::$WAITING_ACTION;
+            return $this->type === self::$WAITING_ACTION;
         }
 
         public function getFilepath($filename): string
