@@ -474,4 +474,19 @@
         {
             return $this->type_color_class;
         }
+
+        public static function generatePositionForWaitingAdBox($AdBoxType = null): int
+        {
+            if (is_null($AdBoxType)) {
+                $AdBoxType = self::$WAITING_ACTION;
+            }
+
+            $adBoxes = self::whereType($AdBoxType)->orderByPosition('asc')->get();
+
+            if ($adBoxes->isEmpty()) {
+                return 1;
+            }
+
+            return $adBoxes->last()->position + 1;
+        }
     }
