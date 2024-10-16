@@ -273,9 +273,10 @@
                     $data['position'] = self::getNextAvailablePosition($request->type);
                 } else {
                     $data['position'] = $adBox->position;
-                }
-                if ($request->has('position') && $request->position != $adBox->position) {
-                    $data['position'] = $request->position;
+                    
+                    if ($request->has('position') && $request->position != $adBox->position) {
+                        $data['position'] = $request->position;
+                    }
                 }
             }
 
