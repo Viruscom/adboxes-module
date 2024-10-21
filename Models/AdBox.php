@@ -24,7 +24,7 @@
         public const FILES_PATH                  = "ad_boxes";
 
         public const CURRENCY_DECIMALS            = 2;
-        public const CURRENCY_SEPARATOR           = ',';
+        public const CURRENCY_SEPARATOR           = '.';
         public const CURRENCY_THOUSANDS_SEPARATOR = '';
         public static int    $WAITING_ACTION         = 0;
         public static int    $FIRST_TYPE             = 1;
