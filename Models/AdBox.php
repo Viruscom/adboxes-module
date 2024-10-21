@@ -155,6 +155,7 @@
             $array[1]['sys_image']      = self::$AD_BOX_1_SYSTEM_IMAGE;
             $array[1]['sys_image_path'] = AdminHelper::getSystemImage(self::$AD_BOX_1_SYSTEM_IMAGE);
             $array[1]['ratio']          = self::$AD_BOX_1_RATIO;
+            $array[1]['field_name']     = 'adbox_first';
             $array[1]['mimes']          = self::$AD_BOX_1_MIMES;
             $array[1]['max_file_size']  = self::$AD_BOX_1_MAX_FILE_SIZE;
             $array[1]['file_rules']     = 'mimes:' . self::$AD_BOX_1_MIMES . '|size:' . self::$AD_BOX_1_MAX_FILE_SIZE . '|dimensions:ratio=' . self::$AD_BOX_1_RATIO;
@@ -163,6 +164,7 @@
             $array[2]['sys_image']      = self::$AD_BOX_2_SYSTEM_IMAGE;
             $array[2]['sys_image_path'] = AdminHelper::getSystemImage(self::$AD_BOX_2_SYSTEM_IMAGE);
             $array[2]['ratio']          = self::$AD_BOX_2_RATIO;
+            $array[2]['field_name']     = 'adbox_second';
             $array[2]['mimes']          = self::$AD_BOX_2_MIMES;
             $array[2]['max_file_size']  = self::$AD_BOX_2_MAX_FILE_SIZE;
             $array[2]['file_rules']     = 'mimes:' . self::$AD_BOX_2_MIMES . '|size:' . self::$AD_BOX_2_MAX_FILE_SIZE . '|dimensions:ratio=' . self::$AD_BOX_2_RATIO;
@@ -171,6 +173,7 @@
             $array[3]['sys_image']      = self::$AD_BOX_3_SYSTEM_IMAGE;
             $array[3]['sys_image_path'] = AdminHelper::getSystemImage(self::$AD_BOX_3_SYSTEM_IMAGE);
             $array[3]['ratio']          = self::$AD_BOX_3_RATIO;
+            $array[3]['field_name']     = 'adbox_third';
             $array[3]['mimes']          = self::$AD_BOX_3_MIMES;
             $array[3]['max_file_size']  = self::$AD_BOX_3_MAX_FILE_SIZE;
             $array[3]['file_rules']     = 'mimes:' . self::$AD_BOX_3_MIMES . '|size:' . self::$AD_BOX_3_MAX_FILE_SIZE . '|dimensions:ratio=' . self::$AD_BOX_3_RATIO;
@@ -179,6 +182,7 @@
             $array[4]['sys_image']      = self::$AD_BOX_4_SYSTEM_IMAGE;
             $array[4]['sys_image_path'] = AdminHelper::getSystemImage(self::$AD_BOX_4_SYSTEM_IMAGE);
             $array[4]['ratio']          = self::$AD_BOX_4_RATIO;
+            $array[4]['field_name']     = 'adbox_fourth';
             $array[4]['mimes']          = self::$AD_BOX_4_MIMES;
             $array[4]['max_file_size']  = self::$AD_BOX_4_MAX_FILE_SIZE;
             $array[4]['file_rules']     = 'mimes:' . self::$AD_BOX_4_MIMES . '|size:' . self::$AD_BOX_4_MAX_FILE_SIZE . '|dimensions:ratio=' . self::$AD_BOX_4_RATIO;
@@ -273,7 +277,7 @@
                     $data['position'] = self::getNextAvailablePosition($request->type);
                 } else {
                     $data['position'] = $adBox->position;
-                    
+
                     if ($request->has('position') && $request->position != $adBox->position) {
                         $data['position'] = $request->position;
                     }
