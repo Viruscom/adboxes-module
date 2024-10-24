@@ -5,6 +5,7 @@
     use App\Helpers\AdminHelper;
     use App\Helpers\FileDimensionHelper;
     use App\Traits\CommonActions;
+    use App\Traits\HasModelRatios;
     use App\Traits\Scopes;
     use App\Traits\StorageActions;
     use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
@@ -17,7 +18,7 @@
 
     class AdBox extends Model implements TranslatableContract
     {
-        use Translatable, StorageActions, Scopes;
+        use Translatable, StorageActions, Scopes, HasModelRatios;
 
         public const PREVIEW_PERMISSION          = "ad_boxes_preview";
         public const PREVIEW_AND_EDIT_PERMISSION = "ad_boxes_preview_and_edit";
@@ -154,38 +155,38 @@
             $array[1]['sys_image_name'] = trans('adboxes::admin.adboxes.index') . ': ' . trans('adboxes::admin.ad_boxes_type_1');
             $array[1]['sys_image']      = self::$AD_BOX_1_SYSTEM_IMAGE;
             $array[1]['sys_image_path'] = AdminHelper::getSystemImage(self::$AD_BOX_1_SYSTEM_IMAGE);
-            $array[1]['ratio']          = self::$AD_BOX_1_RATIO;
             $array[1]['field_name']     = 'adbox_first';
-            $array[1]['mimes']          = self::$AD_BOX_1_MIMES;
-            $array[1]['max_file_size']  = self::$AD_BOX_1_MAX_FILE_SIZE;
-            $array[1]['file_rules']     = 'mimes:' . self::$AD_BOX_1_MIMES . '|size:' . self::$AD_BOX_1_MAX_FILE_SIZE . '|dimensions:ratio=' . self::$AD_BOX_1_RATIO;
+            $array[1]['ratio']          = self::getModelRatio('adbox_first');
+            $array[1]['mimes']          = self::getModelMime('adbox_first');
+            $array[1]['max_file_size']  = self::getModelMaxFileSize('adbox_first');
+            $array[1]['file_rules']     = 'mimes:' . self::getModelMime('adbox_first') . '|size:' . self::getModelMaxFileSize('adbox_first') . '|dimensions:ratio=' . self::getModelRatio('adbox_first');
 
             $array[2]['sys_image_name'] = trans('adboxes::admin.adboxes.index') . ': ' . trans('adboxes::admin.ad_boxes_type_2');
             $array[2]['sys_image']      = self::$AD_BOX_2_SYSTEM_IMAGE;
             $array[2]['sys_image_path'] = AdminHelper::getSystemImage(self::$AD_BOX_2_SYSTEM_IMAGE);
-            $array[2]['ratio']          = self::$AD_BOX_2_RATIO;
             $array[2]['field_name']     = 'adbox_second';
-            $array[2]['mimes']          = self::$AD_BOX_2_MIMES;
-            $array[2]['max_file_size']  = self::$AD_BOX_2_MAX_FILE_SIZE;
-            $array[2]['file_rules']     = 'mimes:' . self::$AD_BOX_2_MIMES . '|size:' . self::$AD_BOX_2_MAX_FILE_SIZE . '|dimensions:ratio=' . self::$AD_BOX_2_RATIO;
+            $array[2]['ratio']          = self::getModelRatio('adbox_second');
+            $array[2]['mimes']          = self::getModelMime('adbox_second');
+            $array[2]['max_file_size']  = self::getModelMaxFileSize('adbox_second');
+            $array[2]['file_rules']     = 'mimes:' . self::getModelMime('adbox_second') . '|size:' . self::getModelMaxFileSize('adbox_second') . '|dimensions:ratio=' . self::getModelRatio('adbox_second');
 
             $array[3]['sys_image_name'] = trans('adboxes::admin.adboxes.index') . ': ' . trans('adboxes::admin.ad_boxes_type_3');
             $array[3]['sys_image']      = self::$AD_BOX_3_SYSTEM_IMAGE;
             $array[3]['sys_image_path'] = AdminHelper::getSystemImage(self::$AD_BOX_3_SYSTEM_IMAGE);
-            $array[3]['ratio']          = self::$AD_BOX_3_RATIO;
             $array[3]['field_name']     = 'adbox_third';
-            $array[3]['mimes']          = self::$AD_BOX_3_MIMES;
-            $array[3]['max_file_size']  = self::$AD_BOX_3_MAX_FILE_SIZE;
-            $array[3]['file_rules']     = 'mimes:' . self::$AD_BOX_3_MIMES . '|size:' . self::$AD_BOX_3_MAX_FILE_SIZE . '|dimensions:ratio=' . self::$AD_BOX_3_RATIO;
+            $array[3]['ratio']          = self::getModelRatio('adbox_third');
+            $array[3]['mimes']          = self::getModelMime('adbox_third');
+            $array[3]['max_file_size']  = self::getModelMaxFileSize('adbox_third');
+            $array[3]['file_rules']     = 'mimes:' . self::getModelMime('adbox_third') . '|size:' . self::getModelMaxFileSize('adbox_third') . '|dimensions:ratio=' . self::getModelRatio('adbox_third');
 
             $array[4]['sys_image_name'] = trans('adboxes::admin.adboxes.index') . ': ' . trans('adboxes::admin.ad_boxes_type_4');
-            $array[4]['sys_image']      = self::$AD_BOX_4_SYSTEM_IMAGE;
+            $array[4]['sys_image']      = self::getModelRatio('adbox_fourth');
             $array[4]['sys_image_path'] = AdminHelper::getSystemImage(self::$AD_BOX_4_SYSTEM_IMAGE);
-            $array[4]['ratio']          = self::$AD_BOX_4_RATIO;
             $array[4]['field_name']     = 'adbox_fourth';
-            $array[4]['mimes']          = self::$AD_BOX_4_MIMES;
-            $array[4]['max_file_size']  = self::$AD_BOX_4_MAX_FILE_SIZE;
-            $array[4]['file_rules']     = 'mimes:' . self::$AD_BOX_4_MIMES . '|size:' . self::$AD_BOX_4_MAX_FILE_SIZE . '|dimensions:ratio=' . self::$AD_BOX_4_RATIO;
+            $array[4]['ratio']          = self::getModelRatio('adbox_fourth');
+            $array[4]['mimes']          = self::getModelMime('adbox_fourth');
+            $array[4]['max_file_size']  = self::getModelMaxFileSize('adbox_fourth');
+            $array[4]['file_rules']     = 'mimes:' . self::getModelMime('adbox_fourth') . '|size:' . self::getModelMaxFileSize('adbox_fourth') . '|dimensions:ratio=' . self::getModelRatio('adbox_fourth');
 
             return $array;
         }
